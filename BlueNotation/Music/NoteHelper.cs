@@ -49,9 +49,33 @@ public static class NoteHelper
         return _letterOffsets[note.Letter] + ((note.Octave + 1) * 12) + _accidentalOffsets[note.Accidental];
     }
 
-    public static IEnumerable<int> GetScale(Letter startLetter)
+    public static IEnumerable<int> GetScale(int start, Key key)
     {
-        throw new NotImplementedException();
+        if (!_scaleNotes.ContainsKey(key))
+        {
+            throw new ArgumentException($"There's no major key \"{key}\".");
+        }
+
+        var count = 0;
+        while (count < 7)
+        {
+            var offset = start % 12;
+
+            if (offset < 0)
+            {
+                offset += 12;
+            }
+
+            if (!_scaleNotes[key].ContainsKey(offset))
+            {
+                start++;
+                continue;
+            }            
+
+            yield return start;
+            count++;
+            start++;
+        }
     }
 
     private static readonly Letter[] _offsetLetters = new[] {

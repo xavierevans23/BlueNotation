@@ -75,6 +75,37 @@ public class NoteHelperTest
     [Fact]
     public void TestGetScale()
     {
+        var notes = NoteHelper.GetScale(60, new(Letter.C, Accidental.Natural)).ToArray();
 
+        Assert.Equal(7, notes.Length);
+        Assert.Equal(60, notes[0]);
+        Assert.Equal(62, notes[1]);
+        Assert.Equal(64, notes[2]);
+        Assert.Equal(65, notes[3]);
+        Assert.Equal(67, notes[4]);
+        Assert.Equal(69, notes[5]);
+        Assert.Equal(71, notes[6]);
+
+        notes = NoteHelper.GetScale(60, new(Letter.G, Accidental.Natural)).ToArray();
+
+        Assert.Equal(7, notes.Length);
+        Assert.Equal(60, notes[0]);
+        Assert.Equal(62, notes[1]);
+        Assert.Equal(64, notes[2]);
+        Assert.Equal(66, notes[3]);
+        Assert.Equal(67, notes[4]);
+        Assert.Equal(69, notes[5]);
+        Assert.Equal(71, notes[6]);
+
+        notes = NoteHelper.GetScale(45, new(Letter.D, Accidental.Flat)).ToArray();
+
+        Assert.Equal(7, notes.Length);
+        Assert.Equal(46, notes[0]);
+        Assert.Equal(48, notes[1]);
+        Assert.Equal(49, notes[2]);
+        Assert.Equal(51, notes[3]);
+        Assert.Equal(53, notes[4]);
+        Assert.Equal(54, notes[5]);
+        Assert.Equal(56, notes[6]);        
     }
 }
