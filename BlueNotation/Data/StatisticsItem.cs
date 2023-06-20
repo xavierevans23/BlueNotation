@@ -11,17 +11,17 @@ public abstract class StatisticsItem
 
     public const int MaxHistory = 5;
 
-    public StatisticsItemHistory[] History = new StatisticsItemHistory[MaxHistory];
+    public StatisticsItemHistory[] History { get; set; } = new StatisticsItemHistory[MaxHistory];
 
-    public int HistoryPointer = 0;
+    public int HistoryPointer { get; set; } = 0;
 
-    public void AddData(int attempts, int timesPlayed, int latencyTotal)
+    public void AddData(StatisticsItemHistory itemHistory)
     {
         LastPlayed = DateTime.Now;
 
-        TotalAttempts += attempts;
-        TotalTimesPlayed += timesPlayed;
-        TotalLatency += latencyTotal;
+        TotalAttempts += itemHistory.Attempts;
+        TotalTimesPlayed += itemHistory.TimesPlayed;
+        TotalLatency += itemHistory.Latency;
 
         HistoryPointer++;
         if (HistoryPointer >= MaxHistory)
@@ -29,7 +29,7 @@ public abstract class StatisticsItem
             HistoryPointer = 0;
         }
 
-        History[HistoryPointer] = new(attempts, timesPlayed, latencyTotal);
+        History[HistoryPointer] = new(itemHistory.Attempts, itemHistory.TimesPlayed, itemHistory.Latency);
     }
 
     public StatisticsItemHistory GetHistory(int count)

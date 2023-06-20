@@ -10,13 +10,13 @@ public class StatisticsItemTest
         var noteItem = new NoteStatisticsItem();
         await Task.Delay(100);
 
-        noteItem.AddData(10, 7, 700);
+        noteItem.AddData(new(10, 7, 700));
         Assert.Equal(10, noteItem.TotalAttempts);
         Assert.Equal(7, noteItem.TotalTimesPlayed);
         Assert.Equal(700, noteItem.TotalLatency);
         Assert.True((DateTime.Now - noteItem.LastPlayed).TotalMilliseconds < 90);
 
-        noteItem.AddData(15, 2, 5);
+        noteItem.AddData(new(15, 2, 5));
         Assert.Equal(25, noteItem.TotalAttempts);
         Assert.Equal(9, noteItem.TotalTimesPlayed);
         Assert.Equal(705, noteItem.TotalLatency);
@@ -30,8 +30,8 @@ public class StatisticsItemTest
         var noteItem = new NoteStatisticsItem();
         await Task.Delay(100);
 
-        noteItem.AddData(10, 7, 700);
-        noteItem.AddData(15, 2, 350);
+        noteItem.AddData(new(10, 7, 700));
+        noteItem.AddData(new(15, 2, 350));
 
         var history = noteItem.GetHistory(1);
         Assert.Equal(15, history.Attempts);

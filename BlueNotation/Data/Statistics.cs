@@ -5,6 +5,7 @@ namespace BlueNotation.Data;
 public class Statistics
 {
     public int TotalNotesPlayed { get; set; } = 0;
+    public int TotalNotesAttempted { get; set; } = 0;
     public DateTime TimeCreated { get; set; } = DateTime.Now;
     public List<NoteStatisticsItem> Notes { get; set; } = new();
     public List<KeyStatisticsItem> Keys { get; set; } = new();
