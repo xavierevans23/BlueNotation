@@ -6,7 +6,7 @@ namespace BlueNotation.Game;
 public interface ISession
 {
     public Key Key { get; }
-    public bool UseTrebleCleff { get; }
+    public bool UseTrebleClef { get; }
     public int TotalNotesPlayed { get; }
     public int TotalAttempts { get; }
     public IEnumerable<Note> GetNotes();

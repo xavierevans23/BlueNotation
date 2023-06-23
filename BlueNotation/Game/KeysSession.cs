@@ -15,7 +15,7 @@ public class KeysSession
     private readonly Dictionary<Key, StatisticsItemHistory> _scaleHistory = new();
 
     public Key Key { get; private set; } = new(Letter.C, Accidental.Natural);
-    public bool UseTrebleCleff { get; private set; } = true;
+    public bool UseTrebleClef { get; private set; } = true;
     public int TotalNotesPlayed { get; private set; } = 0;
     public int TotalAttempts { get; private set; } = 0;
     public int TotalScalesPlayed { get; private set; } = 0;
@@ -61,19 +61,19 @@ public class KeysSession
         }
         while (oldKey == Key && !first && _preset.Keys.Count != 1);
 
-        UseTrebleCleff = true;
+        UseTrebleClef = true;
 
-        if (_preset.CleffMode == CleffMode.Bass)
+        if (_preset.ClefMode == ClefMode.Bass)
         {
-            UseTrebleCleff = false;
+            UseTrebleClef = false;
         }
 
-        if (_preset.CleffMode == CleffMode.Both)
+        if (_preset.ClefMode == ClefMode.Both)
         {
-            UseTrebleCleff = _random.Next(2) == 1;
+            UseTrebleClef = _random.Next(2) == 1;
         }
 
-        var range = UseTrebleCleff ? _preset.TrebleNoteRange : _preset.BassNoteRange;
+        var range = UseTrebleClef ? _preset.TrebleNoteRange : _preset.BassNoteRange;
 
         var startPoint = range[_random.Next(range.Count)];
 

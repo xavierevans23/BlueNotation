@@ -12,7 +12,7 @@ public class NoteSessionTest
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 2,
             MinNotes = 2
@@ -28,7 +28,7 @@ public class NoteSessionTest
         preset = new NotesSessionPreset
         {
             BassNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Bass,
+            ClefMode = ClefMode.Bass,
             AllowRepeats = false,
             MaxNotes = 2,
             MinNotes = 2
@@ -48,7 +48,7 @@ public class NoteSessionTest
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 1,
             MinNotes = 1
@@ -82,7 +82,7 @@ public class NoteSessionTest
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 5,
             MinNotes = 5
@@ -94,7 +94,7 @@ public class NoteSessionTest
         preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62, 64, 65, 67 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 5,
             MinNotes = 5
@@ -105,31 +105,31 @@ public class NoteSessionTest
     }
 
     [Fact]
-    public void TestNoteCleff()
+    public void TestNoteClef()
     {
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 5,
             MinNotes = 5
         };
 
         var session = new NotesSession(preset);
-        Assert.True(session.UseTrebleCleff);
+        Assert.True(session.UseTrebleClef);
 
         preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Bass,
+            ClefMode = ClefMode.Bass,
             AllowRepeats = false,
             MaxNotes = 5,
             MinNotes = 5
         };
 
         session = new NotesSession(preset);
-        Assert.False(session.UseTrebleCleff);
+        Assert.False(session.UseTrebleClef);
     }
 
     [Fact]
@@ -138,7 +138,7 @@ public class NoteSessionTest
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 1,
             MinNotes = 1
@@ -166,7 +166,7 @@ public class NoteSessionTest
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 1,
             MinNotes = 1
@@ -217,7 +217,7 @@ public class NoteSessionTest
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 1,
             MinNotes = 0
@@ -228,7 +228,7 @@ public class NoteSessionTest
         preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 0,
             MinNotes = 1
@@ -239,7 +239,7 @@ public class NoteSessionTest
         preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 5,
             MinNotes = 6
@@ -250,7 +250,7 @@ public class NoteSessionTest
         preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 1,
             MinNotes = 1
@@ -261,7 +261,7 @@ public class NoteSessionTest
         preset = new NotesSessionPreset
         {
             BassNoteRange = new() { },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 1,
             MinNotes = 1

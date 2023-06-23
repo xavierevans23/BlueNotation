@@ -12,7 +12,7 @@ public class NotesSession : ISession
     private readonly Queue<int> _notes = new();
     private int _currentAttempts = 0;
 
-    public bool UseTrebleCleff { get; private set; } = true;
+    public bool UseTrebleClef { get; private set; } = true;
     public Key Key { get; } = new(Letter.C, Accidental.Natural);
     public int TotalNotesPlayed { get; private set; } = 0;
     public int TotalAttempts { get; private set; } = 0;
@@ -52,23 +52,23 @@ public class NotesSession : ISession
         if (_notes.Count <= 1)
         {
             var oldNote = _notes.Count == 1 ? _notes.Peek() : int.MinValue;
-            var oldCleff = UseTrebleCleff;
+            var oldClef = UseTrebleClef;
 
-            var cleff = true;
-            if (_preset.CleffMode == CleffMode.Bass)
+            var clef = true;
+            if (_preset.ClefMode == ClefMode.Bass)
             {
-                cleff = false;
+                clef = false;
             }
-            if (_preset.CleffMode == CleffMode.Both)
+            if (_preset.ClefMode == ClefMode.Both)
             {
-                cleff = _random.Next(2) == 1;
+                clef = _random.Next(2) == 1;
             }
 
-            var range = cleff ? _preset.TrebleNoteRange : _preset.BassNoteRange;
+            var range = clef ? _preset.TrebleNoteRange : _preset.BassNoteRange;
 
             var count = _random.Next(_preset.MinNotes, _preset.MaxNotes + 1);
 
-            bool requireUnique = count == 1 && !_preset.AllowRepeats && range.Count > 1 && cleff == oldCleff;
+            bool requireUnique = count == 1 && !_preset.AllowRepeats && range.Count > 1 && clef == oldClef;
 
             _notes.Clear();
 
@@ -82,7 +82,7 @@ public class NotesSession : ISession
                 while (requireUnique && chosenNote == oldNote);
 
                 _notes.Enqueue(chosenNote);
-                UseTrebleCleff = cleff;
+                UseTrebleClef = clef;
                 return;
             }
 
@@ -97,7 +97,7 @@ public class NotesSession : ISession
                 _notes.Enqueue(chosenNote);
             }
 
-            UseTrebleCleff = cleff;
+            UseTrebleClef = clef;
             return;
         }
 

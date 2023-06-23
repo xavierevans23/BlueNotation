@@ -15,7 +15,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
@@ -26,7 +26,7 @@ public class KeySessionTest
         Assert.Equal(new Key(Letter.D, Accidental.Flat), session.Key);
         Assert.Equal(new Note(Letter.D, 4, Accidental.Flat), session.GetNotes().First());
 
-        preset.CleffMode = CleffMode.Bass;
+        preset.ClefMode = ClefMode.Bass;
         session = new KeysSession(preset);
 
         Assert.Equal(new Key(Letter.D, Accidental.Flat), session.Key);
@@ -41,7 +41,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
@@ -78,7 +78,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat), new(Letter.C, Accidental.Natural) }
@@ -99,14 +99,14 @@ public class KeySessionTest
     }
 
     [Fact]
-    public void TestCleffs()
+    public void TestClefs()
     {
         var preset = new KeysSessionPreset
         {
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
@@ -114,13 +114,13 @@ public class KeySessionTest
 
         var session = new KeysSession(preset);
 
-        Assert.True(session.UseTrebleCleff);
+        Assert.True(session.UseTrebleClef);
 
-        preset.CleffMode = CleffMode.Bass;
+        preset.ClefMode = ClefMode.Bass;
 
         session = new KeysSession(preset);
 
-        Assert.False(session.UseTrebleCleff);
+        Assert.False(session.UseTrebleClef);
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
@@ -170,7 +170,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 48 },
             TrebleNoteRange = new List<int> { 72 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.C, Accidental.Natural) }
@@ -182,7 +182,7 @@ public class KeySessionTest
 
         Assert.Equal(first, new(Letter.C, 5, Accidental.Natural));
 
-        preset.CleffMode = CleffMode.Bass;
+        preset.ClefMode = ClefMode.Bass;
 
         session = new KeysSession(preset);
 
@@ -199,7 +199,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
@@ -226,7 +226,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
@@ -289,7 +289,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { }
@@ -302,7 +302,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { },
             TrebleNoteRange = new List<int> { 61 },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
@@ -315,7 +315,7 @@ public class KeySessionTest
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
             TrebleNoteRange = new List<int> { },
-            CleffMode = CleffMode.Treble,
+            ClefMode = ClefMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
             Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
