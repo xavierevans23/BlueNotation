@@ -18,7 +18,7 @@ public class KeySessionTest
             CleffMode = CleffMode.Treble,
             Direction = Direction.Up,
             ForceRetry = false,
-            Keys = new List<Key> { new(Letter.D, Accidental.Flat) }            
+            Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
         };
 
         var session = new KeysSession(preset);
@@ -50,7 +50,7 @@ public class KeySessionTest
         var session = new KeysSession(preset);
 
         var first = NoteHelper.GetMidi(session.GetNotes().First());
-        
+
         session.NotePlayed(first, 100);
 
         var second = NoteHelper.GetMidi(session.GetNotes().First());
@@ -117,7 +117,7 @@ public class KeySessionTest
         Assert.True(session.UseTrebleCleff);
 
         preset.CleffMode = CleffMode.Bass;
-        
+
         session = new KeysSession(preset);
 
         Assert.False(session.UseTrebleCleff);
@@ -183,7 +183,7 @@ public class KeySessionTest
         Assert.Equal(first, new(Letter.C, 5, Accidental.Natural));
 
         preset.CleffMode = CleffMode.Bass;
-        
+
         session = new KeysSession(preset);
 
         first = session.GetNotes().First();
@@ -270,14 +270,57 @@ public class KeySessionTest
 
         Assert.Equal(14, stats.TotalNotesPlayed);
         Assert.Equal(16, stats.TotalNotesAttempted);
-        
+
         stats.LoadData();
 
         Assert.Single(stats.Keys);
-       
+
         var key = stats.GetKey(new(Letter.D, Accidental.Flat));
         Assert.Equal(4, key.TotalAttempts);
         Assert.Equal(2, key.TotalTimesPlayed);
         Assert.Equal(1400, key.TotalLatency);
+    }
+
+    [Fact]
+    public void TestValidation()
+    {
+        var preset = new KeysSessionPreset
+        {
+            AllowRepeats = false,
+            BassNoteRange = new List<int> { 60 },
+            TrebleNoteRange = new List<int> { 61 },
+            CleffMode = CleffMode.Treble,
+            Direction = Direction.Up,
+            ForceRetry = false,
+            Keys = new List<Key> { }
+        };
+
+        Assert.Throws<ArgumentException>(() => new KeysSession(preset));
+
+        preset = new KeysSessionPreset
+        {
+            AllowRepeats = false,
+            BassNoteRange = new List<int> { },
+            TrebleNoteRange = new List<int> { 61 },
+            CleffMode = CleffMode.Treble,
+            Direction = Direction.Up,
+            ForceRetry = false,
+            Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
+        };
+
+        Assert.Throws<ArgumentException>(() => new KeysSession(preset));
+
+        preset = new KeysSessionPreset
+        {
+            AllowRepeats = false,
+            BassNoteRange = new List<int> { 60 },
+            TrebleNoteRange = new List<int> { },
+            CleffMode = CleffMode.Treble,
+            Direction = Direction.Up,
+            ForceRetry = false,
+            Keys = new List<Key> { new(Letter.D, Accidental.Flat) }
+        };
+
+        Assert.Throws<ArgumentException>(() => new KeysSession(preset));
     }
 }

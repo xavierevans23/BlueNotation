@@ -22,9 +22,22 @@ public class KeysSession
 
     public KeysSession(KeysSessionPreset preset)
     {
+        if (preset.Keys.Count == 0)
+        {
+            throw new ArgumentException("Must provide at least one key.", nameof(preset));
+        }
+        if (preset.TrebleNoteRange.Count == 0)
+        {
+            throw new ArgumentException("Must provide at least one starting treble note.", nameof(preset));
+        }
+        if (preset.BassNoteRange.Count == 0)
+        {
+            throw new ArgumentException("Must provide at least one starting bass note.", nameof(preset));
+        }
+
         _preset = preset;
 
-        GetNextNote(true);
+        GetNextNote(true);        
     }
 
     public IEnumerable<Note> GetNotes()

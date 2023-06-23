@@ -19,6 +19,27 @@ public class NotesSession : ISession
 
     public NotesSession(NotesSessionPreset preset)
     {
+        if (preset.MinNotes == 0)
+        {
+            throw new ArgumentException("Minimum notes must be at least one.", nameof(preset));
+        }
+        if (preset.MaxNotes == 0)
+        {
+            throw new ArgumentException("Maximum notes must be at least one.", nameof(preset));
+        }
+        if (preset.MaxNotes < preset.MinNotes)
+        {
+            throw new ArgumentException("Minimum notes must be smaller or equal to maximum notes.", nameof(preset));
+        }
+        if (preset.TrebleNoteRange.Count == 0)
+        {
+            throw new ArgumentException("Must provide at least one starting treble note.", nameof(preset));
+        }
+        if (preset.BassNoteRange.Count == 0)
+        {
+            throw new ArgumentException("Must provide at least one starting bass note.", nameof(preset));
+        }
+
         _preset = preset;
 
         NextNote();
@@ -27,7 +48,7 @@ public class NotesSession : ISession
     private void NextNote()
     {
         _currentAttempts = 0;
-        
+
         if (_notes.Count <= 1)
         {
             var oldNote = _notes.Count == 1 ? _notes.Peek() : int.MinValue;
@@ -85,7 +106,7 @@ public class NotesSession : ISession
 
     public IEnumerable<Note> GetNotes() => _notes.Select(n => NoteHelper.GetNote(n, Key));
 
-    public bool NotePlayed(int midi, int latency) 
+    public bool NotePlayed(int midi, int latency)
     {
         _currentAttempts++;
 
@@ -110,9 +131,9 @@ public class NotesSession : ISession
         return false;
     }
 
-    public void ApplyStatistics(Statistics statistics) 
+    public void ApplyStatistics(Statistics statistics)
     {
-        statistics.TotalNotesPlayed+= TotalNotesPlayed;
+        statistics.TotalNotesPlayed += TotalNotesPlayed;
         statistics.TotalNotesAttempted += TotalAttempts;
 
         foreach (var pair in _noteStats)
@@ -125,6 +146,6 @@ public class NotesSession : ISession
 
     public IEnumerable<KeyValuePair<Note, StatisticsItemHistory>> GetNoteStatistics()
     {
-        return _noteStats.Select( kvp => new KeyValuePair<Note, StatisticsItemHistory>(NoteHelper.GetNote(kvp.Key, Key), kvp.Value));
+        return _noteStats.Select(kvp => new KeyValuePair<Note, StatisticsItemHistory>(NoteHelper.GetNote(kvp.Key, Key), kvp.Value));
     }
 }

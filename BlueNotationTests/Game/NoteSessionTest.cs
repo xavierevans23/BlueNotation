@@ -187,12 +187,12 @@ public class NoteSessionTest
         Assert.Equal(3, session.TotalNotesPlayed);
         Assert.Equal(4, session.TotalAttempts);
 
-        var history = session.GetNoteStatistics().ToDictionary(a => a.Key, b=> b.Value);
+        var history = session.GetNoteStatistics().ToDictionary(a => a.Key, b => b.Value);
 
         Assert.True(history.ContainsKey(note));
         Assert.Equal(2, history.Count);
 
-        var stats = new Statistics() { TotalNotesAttempted =2, TotalNotesPlayed = 1};        
+        var stats = new Statistics() { TotalNotesAttempted = 2, TotalNotesPlayed = 1 };
 
         session.ApplyStatistics(stats);
 
@@ -209,5 +209,64 @@ public class NoteSessionTest
         Assert.Equal(2, stats.GetNote(firstMidi).TotalAttempts);
         Assert.Equal(1, stats.GetNote(firstMidi).TotalTimesPlayed);
         Assert.Equal(200, stats.GetNote(firstMidi).TotalLatency);
+    }
+
+    [Fact]
+    public void TestValidation()
+    {
+        var preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 1,
+            MinNotes = 0
+        };
+
+        Assert.Throws<ArgumentException>(() => new NotesSession(preset));
+
+        preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 0,
+            MinNotes = 1
+        };
+
+        Assert.Throws<ArgumentException>(() => new NotesSession(preset));
+
+        preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 5,
+            MinNotes = 6
+        };
+
+        Assert.Throws<ArgumentException>(() => new NotesSession(preset));
+
+        preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 1,
+            MinNotes = 1
+        };
+
+        Assert.Throws<ArgumentException>(() => new NotesSession(preset));
+
+        preset = new NotesSessionPreset
+        {
+            BassNoteRange = new() { },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 1,
+            MinNotes = 1
+        };
+
+        Assert.Throws<ArgumentException>(() => new NotesSession(preset));
     }
 }
