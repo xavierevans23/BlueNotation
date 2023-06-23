@@ -128,7 +128,7 @@ public static class NoteHelper
     {
         foreach (var scale in _majorScaleData)
         {
-            var keyStrings = scale.Split(' ');
+            var keyStrings = scale.Split();
             var keys = new List<Key>();
 
             foreach (var key in keyStrings)

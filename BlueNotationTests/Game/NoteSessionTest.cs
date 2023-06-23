@@ -9,17 +9,35 @@ public class NoteSessionTest
     [Fact]
     public void TestRange()
     {
-        var preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62 };
-        preset.CleffMode = CleffMode.Treble;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 2;
-        preset.MinNotes = 2;
+        var preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 2,
+            MinNotes = 2
+        };
 
         var session = new NotesSession(preset);
         var notes = session.GetNotes().Select(NoteHelper.GetMidi).ToList();
 
-        Assert.Equal(2, notes.Count());
+        Assert.Equal(2, notes.Count);
+        Assert.Contains(60, notes);
+        Assert.Contains(62, notes);
+
+        preset = new NotesSessionPreset
+        {
+            BassNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Bass,
+            AllowRepeats = false,
+            MaxNotes = 2,
+            MinNotes = 2
+        };
+
+        session = new NotesSession(preset);
+        notes = session.GetNotes().Select(NoteHelper.GetMidi).ToList();
+
+        Assert.Equal(2, notes.Count);
         Assert.Contains(60, notes);
         Assert.Contains(62, notes);
     }
@@ -27,12 +45,14 @@ public class NoteSessionTest
     [Fact]
     public void TestRepeat()
     {
-        var preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62 };
-        preset.CleffMode = CleffMode.Treble;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 1;
-        preset.MinNotes = 1;
+        var preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 1,
+            MinNotes = 1
+        };
 
         var session = new NotesSession(preset);
         var first = session.GetNotes().First();
@@ -59,22 +79,26 @@ public class NoteSessionTest
     [Fact]
     public void TestNoteCount()
     {
-        var preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62 };
-        preset.CleffMode = CleffMode.Treble;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 5;
-        preset.MinNotes = 5;
+        var preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 5,
+            MinNotes = 5
+        };
 
         var session = new NotesSession(preset);
         Assert.Equal(2, session.GetNotes().Count());
 
-        preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62, 64, 65, 67 };
-        preset.CleffMode = CleffMode.Treble;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 5;
-        preset.MinNotes = 5;
+        preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62, 64, 65, 67 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 5,
+            MinNotes = 5
+        };
 
         session = new NotesSession(preset);
         Assert.Equal(5, session.GetNotes().Count());
@@ -83,22 +107,26 @@ public class NoteSessionTest
     [Fact]
     public void TestNoteCleff()
     {
-        var preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62 };
-        preset.CleffMode = CleffMode.Treble;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 5;
-        preset.MinNotes = 5;
+        var preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 5,
+            MinNotes = 5
+        };
 
         var session = new NotesSession(preset);
         Assert.True(session.UseTrebleCleff);
 
-        preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62 };
-        preset.CleffMode = CleffMode.Bass;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 5;
-        preset.MinNotes = 5;
+        preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Bass,
+            AllowRepeats = false,
+            MaxNotes = 5,
+            MinNotes = 5
+        };
 
         session = new NotesSession(preset);
         Assert.False(session.UseTrebleCleff);
@@ -107,12 +135,14 @@ public class NoteSessionTest
     [Fact]
     public void TestNotePlayed()
     {
-        var preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62 };
-        preset.CleffMode = CleffMode.Treble;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 1;
-        preset.MinNotes = 1;
+        var preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 1,
+            MinNotes = 1
+        };
 
         var session = new NotesSession(preset);
         var note = session.GetNotes().First();
@@ -133,12 +163,14 @@ public class NoteSessionTest
     [Fact]
     public void TestStatistics()
     {
-        var preset = new NotesSessionPreset();
-        preset.TrebleNoteRange = new() { 60, 62 };
-        preset.CleffMode = CleffMode.Treble;
-        preset.AllowRepeats = false;
-        preset.MaxNotes = 1;
-        preset.MinNotes = 1;
+        var preset = new NotesSessionPreset
+        {
+            TrebleNoteRange = new() { 60, 62 },
+            CleffMode = CleffMode.Treble,
+            AllowRepeats = false,
+            MaxNotes = 1,
+            MinNotes = 1
+        };
 
         var session = new NotesSession(preset);
         var note = session.GetNotes().First();
@@ -155,7 +187,13 @@ public class NoteSessionTest
         Assert.Equal(3, session.TotalNotesPlayed);
         Assert.Equal(4, session.TotalAttempts);
 
-        var stats = new Statistics() { TotalNotesAttempted =2, TotalNotesPlayed = 1};
+        var history = session.GetNoteStatistics().ToDictionary(a => a.Key, b=> b.Value);
+
+        Assert.True(history.ContainsKey(note));
+        Assert.Equal(2, history.Count);
+
+        var stats = new Statistics() { TotalNotesAttempted =2, TotalNotesPlayed = 1};        
+
         session.ApplyStatistics(stats);
 
         var firstMidi = NoteHelper.GetMidi(note);

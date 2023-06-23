@@ -53,8 +53,7 @@ public class NotesSession : ISession
 
             if (requireUnique)
             {
-                var chosenNote = 0;
-
+                int chosenNote;
                 do
                 {
                     chosenNote = range[_random.Next(range.Count)];
@@ -122,5 +121,10 @@ public class NotesSession : ISession
 
             note.AddData(pair.Value);
         }
+    }
+
+    public IEnumerable<KeyValuePair<Note, StatisticsItemHistory>> GetNoteStatistics()
+    {
+        return _noteStats.Select( kvp => new KeyValuePair<Note, StatisticsItemHistory>(NoteHelper.GetNote(kvp.Key, Key), kvp.Value));
     }
 }
