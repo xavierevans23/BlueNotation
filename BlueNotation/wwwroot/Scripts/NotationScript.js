@@ -12,10 +12,10 @@
     const div = document.getElementById(elementID);
     const renderer = new Renderer(div, Renderer.Backends.SVG);
 
-    renderer.resize(500, 200);
+    renderer.resize(500, 300);
     const context = renderer.getContext();
 
-    const stave = new Stave(40, 40, 400);
+    const stave = new Stave(25, 90, 450);
 
     stave.addClef(clef).addTimeSignature(timeSignatureString);
 
@@ -38,7 +38,7 @@
     });
     voice.addTickables(notes);
     
-    new Formatter().joinVoices([voice]).format([voice], 350);
+    new Formatter().joinVoices([voice]).format([voice], 300);
     
     voice.draw(context, stave);    
 }
