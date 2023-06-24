@@ -1,0 +1,19 @@
+.TopContainer {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.MainContainer{
+    height: 100%;
+    flex-grow: 1;
+}
+
+.MenuContainer {
+    width: 300px;
+    height: 100%;
+}

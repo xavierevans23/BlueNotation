@@ -31,7 +31,7 @@ public class DataServiceTest
         note = session.GetNotes().First();
         session.NotePlayed(NoteHelper.GetMidi(note), 50);
 
-        var dataService = new DataService();
+        var dataService = new DataService(null!);
 
         var stats = dataService.Statistics;
         stats.TotalNotesAttempted = 2;
