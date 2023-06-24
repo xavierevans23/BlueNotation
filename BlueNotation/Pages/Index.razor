@@ -40,7 +40,7 @@
 
         if (_stave is not null)
         {
-            await _stave.SetDisplay(new List<Note> { NoteHelper.GetNote(note, new(Letter.D, Accidental.Flat)) }, false, new(Letter.D, Accidental.Flat));
+            await _stave.SetDisplay(new List<Note> {}, false, new(Letter.D, Accidental.Flat));
         }
     }
 }

@@ -24,23 +24,31 @@
     stave.setContext(context).draw();
     document.getElementById(elementID).firstChild.style = "width: 100%; height: 100%"
 
-    const staveNote = new StaveNote({
-        keys: noteNames,
-        duration: noteDuration,
-        clef: clef
-    });
+    if (noteNames.length > 0) {
+        const staveNote = new StaveNote({
+            keys: noteNames,
+            duration: noteDuration,
+            clef: clef
+        });
 
-    const notes = [staveNote];    
+        const notes = [staveNote];
 
-    const voice = new Voice({
-        num_beats: timeSignatureTop,
-        beat_value: timeSignatureBottom
-    });
-    voice.addTickables(notes);
-    
-    new Formatter().joinVoices([voice]).format([voice], 300);
-    
-    voice.draw(context, stave);    
+        const voice = new Voice({
+            num_beats: timeSignatureTop,
+            beat_value: timeSignatureBottom
+        });
+        voice.addTickables(notes);
+
+        new Formatter().joinVoices([voice]).format([voice], 300);
+        voice.draw(context, stave);
+    }
+    else {
+        try {
+            new Formatter().format([], 300);
+        }
+        catch {
+        }
+    }
 }
 
 function clearBox(elementID) {
