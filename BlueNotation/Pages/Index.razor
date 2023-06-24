@@ -9,8 +9,11 @@
 <p>@(MidiService.MidiStatus)</p>
 <p>@_latest</p>
 
+<Stave @ref="_stave"/>
+
 @code{
     private string? _latest;
+    private Stave? _stave;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -33,5 +36,11 @@
         Console.WriteLine(note);
         _latest = note.ToString();
         await InvokeAsync(StateHasChanged);
+
+
+        if (_stave is not null)
+        {
+            await _stave.SetDisplay(new List<Note> { NoteHelper.GetNote(note, new(Letter.D, Accidental.Flat)) }, false, new(Letter.D, Accidental.Flat));
+        }
     }
 }

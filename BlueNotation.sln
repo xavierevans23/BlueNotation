@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlueNotation", "BlueNotation\BlueNotation.csproj", "{6247FF08-D19E-4D55-935B-A4A73F6387BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueNotationTests", "BlueNotationTests\BlueNotationTests.csproj", "{C4C6C473-4AF1-4B59-A00D-006D2DA97F6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlueNotationTests", "BlueNotationTests\BlueNotationTests.csproj", "{C4C6C473-4AF1-4B59-A00D-006D2DA97F6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
