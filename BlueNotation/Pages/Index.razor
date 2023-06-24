@@ -1,4 +1,5 @@
 ﻿@inject MidiService MidiService
+@inject DataService DataService
 
 @page "/"
 
@@ -22,6 +23,7 @@
             MidiService.StatusChanged += Update;
             MidiService.NoteDown += Output;
             await MidiService.StartConnection();
+            await RunTest();
         }
     }
 
@@ -29,6 +31,11 @@
     {
         Console.WriteLine("Midi update");
         await InvokeAsync(StateHasChanged);
+
+        if (_stave is not null)
+        {
+            await _stave.SetDisplay();
+        }
     }
 
     private async void Output(object? sender, int note)
@@ -37,10 +44,20 @@
         _latest = note.ToString();
         await InvokeAsync(StateHasChanged);
 
-
         if (_stave is not null)
         {
-            await _stave.SetDisplay(new List<Note> {}, false, new(Letter.D, Accidental.Flat));
+            await _stave.SetDisplay(new List<Note> { NoteHelper.GetNote(note, new(Letter.D, Accidental.Flat)) }, false, new(Letter.D, Accidental.Flat));
         }
+    }
+
+    private async Task RunTest()
+    {
+        var stats = DataService.Statistics;
+        stats.TotalNotesPlayed = 5;
+
+        await DataService.SaveData();
+        await DataService.LoadData();
+
+        Console.WriteLine(DataService.Statistics.TotalNotesPlayed);
     }
 }
