@@ -11,13 +11,23 @@ public class LocalStorageService
         _jsRuntime = jsRuntime;
     }
 
-    public async Task Save(string data)
+    public async Task SaveData(string data)
     {
         await _jsRuntime.InvokeVoidAsync("saveLocalStorage", "data", data);
     }
 
-    public async Task<string> Load()
+    public async Task<string?> LoadData()
     {
-        return await _jsRuntime.InvokeAsync<string>("loadLocalStorage", "data");
+        return await _jsRuntime.InvokeAsync<string?>("loadLocalStorage", "data");
+    }
+
+    public async Task SavePresets(string data)
+    {
+        await _jsRuntime.InvokeVoidAsync("saveLocalStorage", "presets", data);
+    }
+
+    public async Task<string?> LoadPresets()
+    {
+        return await _jsRuntime.InvokeAsync<string?>("loadLocalStorage", "presets");
     }
 }

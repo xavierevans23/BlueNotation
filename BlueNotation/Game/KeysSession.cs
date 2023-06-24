@@ -19,6 +19,7 @@ public class KeysSession
     public int TotalNotesPlayed { get; private set; } = 0;
     public int TotalAttempts { get; private set; } = 0;
     public int TotalScalesPlayed { get; private set; } = 0;
+    public int TotalScalePerfect { get; private set; } = 0;
 
     public KeysSession(KeysSessionPreset preset)
     {
@@ -132,6 +133,11 @@ public class KeysSession
 
                 var item = _scaleHistory[Key];
                 _scaleHistory[Key] = new(item.Attempts + _elapsedAttempts, item.TimesPlayed + 1,item.Latency + _elapsedLatency);
+
+                if (_elapsedAttempts == 1)
+                {
+                    TotalScalePerfect++;
+                }
             }
 
             GetNextNote();
@@ -142,8 +148,7 @@ public class KeysSession
         if (_preset.ForceRetry)
         {
             _position = 6;
-            _elapsedLatency = 1;
-            _elapsedAttempts++;
+            _elapsedLatency = 1;            
         }
 
         return false;

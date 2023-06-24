@@ -9,6 +9,7 @@ public abstract class SessionPreset
     public bool AllowRepeats { get; set; } = false;
     public List<int> TrebleNoteRange { get; set; } = new() { 60, 62, 64, 65, 67, 69, 71, 72 };
     public List<int> BassNoteRange { get; set; } = new() { 60, 62, 64, 65, 67, 69, 71, 72 };
+    public string Name { get; set; } = "Test";
 }
 
 public enum EndMode

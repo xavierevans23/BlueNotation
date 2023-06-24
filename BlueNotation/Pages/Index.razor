@@ -13,23 +13,10 @@
 
 <Stave @ref="_stave"/>
 
-<MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
-    Scrollable Dialog
-</MudButton>
+
 @code{
     private string? _latest;
     private Stave? _stave;
-    bool license_accepted = false;
-
-    async Task OpenDialog()
-    {
-        var result = await DialogService.Show<Options>("MudBlazor License").Result;
-
-        if (!result.Canceled)
-        {
-            license_accepted = (bool)(result.Data ?? false);
-        }
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -70,7 +57,7 @@
         var stats = DataService.Statistics;
         stats.TotalNotesPlayed = 5;
 
-        await DataService.SaveData();
+        //await DataService.SaveData();
         await DataService.LoadData();
 
         Console.WriteLine(DataService.Statistics.TotalNotesPlayed);

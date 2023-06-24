@@ -1,4 +1,5 @@
 ﻿using BlueNotation.Data;
+using BlueNotation.Game;
 using System.Xml.Serialization;
 
 namespace BlueNotation.Services;
@@ -8,6 +9,7 @@ public class DataService
     private readonly LocalStorageService _storageService;
 
     public Statistics Statistics { get; private set; } = new();
+    public PresetsData PresetsData { get; private set; } = new();
 
     public DataService(LocalStorageService localStorageService)
     {
@@ -16,13 +18,19 @@ public class DataService
 
     public async Task SaveData()
     {
-        await _storageService.Save(SerializeData());
+        await _storageService.SaveData(SerializeData());
     }
 
     public async Task LoadData()
     {
-        var xml = await _storageService.Load();
-        DeserializeData(xml);
+        var xml = await _storageService.LoadData();
+
+        if (xml is not null)
+        {
+            DeserializeData(xml);
+        }
+
+        Console.WriteLine("Found no local storage.");
     }
 
     public string SerializeData() 
@@ -47,6 +55,45 @@ public class DataService
             Statistics = stats;
             
             Statistics.UnloadData();
+            return;
+        }
+
+        throw new ArgumentException("Could not be deserialized.", nameof(xml));
+    }
+
+    public async Task SavePresets()
+    {
+        await _storageService.SavePresets(SerializePresets());
+    }
+
+    public async Task LoadPresets()
+    {
+        var xml = await _storageService.LoadPresets();
+
+        if (xml is not null)
+        {
+            DeserializePresets(xml);
+        }
+    }
+
+    public string SerializePresets()
+    {
+        var serializer = new XmlSerializer(PresetsData.GetType());
+
+        using StringWriter textWriter = new();
+        serializer.Serialize(textWriter, PresetsData);
+
+        return textWriter.ToString();
+    }
+
+    public void DeserializePresets(string xml)
+    {
+        using var reader = new StringReader(xml);
+        var deserializer = new XmlSerializer(PresetsData.GetType());
+
+        if (deserializer.Deserialize(reader) is PresetsData presetData)
+        {
+            PresetsData = presetData;
             return;
         }
 

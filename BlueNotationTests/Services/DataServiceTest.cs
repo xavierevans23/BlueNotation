@@ -8,7 +8,7 @@ namespace BlueNotationTests.Services;
 public class DataServiceTest
 {
     [Fact]
-    public void SerializationTest()
+    public void DataSerializationTest()
     {
         var preset = new NotesSessionPreset
         {
@@ -56,5 +56,20 @@ public class DataServiceTest
         Assert.Equal(2, stats.GetNote(firstMidi).TotalAttempts);
         Assert.Equal(1, stats.GetNote(firstMidi).TotalTimesPlayed);
         Assert.Equal(200, stats.GetNote(firstMidi).TotalLatency);
+    }
+
+    [Fact]
+    public void PresetsSerializationTests()
+    {
+        var preset = new NotesSessionPreset { Name = "testname", MaxNotes = 15 };
+        
+        var dataService = new DataService(null!);
+
+        dataService.PresetsData.AddNotesPreset(preset);
+
+        var xml = dataService.SerializePresets();
+        dataService.DeserializePresets(xml);
+
+        Assert.Equal(15, (dataService.PresetsData.GetNotesPreset("testname") as NotesSessionPreset)!.MaxNotes);
     }
 }

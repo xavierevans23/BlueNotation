@@ -187,6 +187,8 @@ public class NoteSessionTest
         Assert.Equal(3, session.TotalNotesPlayed);
         Assert.Equal(4, session.TotalAttempts);
 
+        Assert.Equal(2, session.TotalPerfect);
+
         var history = session.GetNoteStatistics().ToDictionary(a => a.Key, b => b.Value);
 
         Assert.True(history.ContainsKey(note));

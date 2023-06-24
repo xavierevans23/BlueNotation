@@ -1,7 +1,6 @@
 ﻿using BlueNotation.Data;
 using BlueNotation.Game;
 using BlueNotation.Music;
-using System.Collections.Generic;
 
 namespace BlueNotationTests.Game;
 
@@ -221,7 +220,7 @@ public class KeySessionTest
     [Fact]
     public void TestStatistics()
     {
-        var preset = new KeysSessionPreset
+        var preset = new KeysSessionPreset  
         {
             AllowRepeats = false,
             BassNoteRange = new List<int> { 60 },
@@ -258,6 +257,7 @@ public class KeySessionTest
         Assert.Equal(2, session.TotalScalesPlayed);
         Assert.Equal(14, session.TotalNotesPlayed);
         Assert.Equal(16, session.TotalAttempts);
+        Assert.Equal(1, session.TotalScalePerfect);
 
         var results = session.GetKeyStatistics().ToDictionary(a => a.Key, b => b.Value);
 

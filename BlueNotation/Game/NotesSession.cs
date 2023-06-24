@@ -16,6 +16,7 @@ public class NotesSession : ISession
     public Key Key { get; } = new(Letter.C, Accidental.Natural);
     public int TotalNotesPlayed { get; private set; } = 0;
     public int TotalAttempts { get; private set; } = 0;
+    public int TotalPerfect { get; private set; } = 0;
 
     public NotesSession(NotesSessionPreset preset)
     {
@@ -123,6 +124,11 @@ public class NotesSession : ISession
             var old = _noteStats[midi];
 
             _noteStats[midi] = new(old.Attempts + _currentAttempts, old.TimesPlayed + 1, old.Latency + latency);
+
+            if (_currentAttempts == 1)
+            {
+                TotalPerfect++;
+            }
 
             NextNote();
             return true;
