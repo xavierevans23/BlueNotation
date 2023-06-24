@@ -1,3 +1,37 @@
-﻿@page "/"
+﻿@inject MidiService MidiService
+
+@page "/"
 
 <h1>Hello, world!</h1>
+
+<p>@(MidiService.DeviceName)</p>
+<p>@(MidiService.MidiError)</p>
+<p>@(MidiService.MidiStatus)</p>
+<p>@_latest</p>
+
+@code{
+    private string? _latest;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            MidiService.StatusChanged += Update;
+            MidiService.NoteDown += Output;
+            await MidiService.StartConnection();
+        }
+    }
+
+    private async void Update(object? sender, EventArgs e)
+    {
+        Console.WriteLine("Midi update");
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void Output(object? sender, int note)
+    {
+        Console.WriteLine(note);
+        _latest = note.ToString();
+        await InvokeAsync(StateHasChanged);
+    }
+}
