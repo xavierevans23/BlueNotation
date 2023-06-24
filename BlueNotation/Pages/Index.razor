@@ -1,5 +1,6 @@
 ﻿@inject MidiService MidiService
 @inject DataService DataService
+@inject IDialogService DialogService
 
 @page "/"
 
@@ -12,9 +13,23 @@
 
 <Stave @ref="_stave"/>
 
+<MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">
+    Scrollable Dialog
+</MudButton>
 @code{
     private string? _latest;
     private Stave? _stave;
+    bool license_accepted = false;
+
+    async Task OpenDialog()
+    {
+        var result = await DialogService.Show<Options>("MudBlazor License").Result;
+
+        if (!result.Canceled)
+        {
+            license_accepted = (bool)(result.Data ?? false);
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -46,7 +61,7 @@
 
         if (_stave is not null)
         {
-            await _stave.SetDisplay(new List<Note> { NoteHelper.GetNote(note, new(Letter.D, Accidental.Flat)) }, false, new(Letter.D, Accidental.Flat));
+            await _stave.SetDisplay(new List<Note> { NoteHelper.GetNote(note, new(Letter.C, Accidental.Sharp)) }, false, new(Letter.C, Accidental.Sharp));
         }
     }
 

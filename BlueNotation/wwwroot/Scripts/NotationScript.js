@@ -1,6 +1,12 @@
 ﻿function draw(elementID, noteNames, noteDuration, timeSignatureTop, timeSignatureBottom, timeSignatureString, keySignatureString, clef) {
 
-    clearBox(elementID);
+    try {
+        clearBox(elementID);
+    }
+    catch {
+        return;
+    }
+
     const {
         Renderer,
         Stave,
