@@ -1,0 +1,14 @@
+﻿@keyframes flashAnimation {
+    from {
+        opacity: 50%
+    }
+
+    to {
+        opacity: 100%
+    }
+}
+
+.flash {
+    animation-name: flashAnimation;
+    animation-duration: 0.3s;
+}

@@ -9,13 +9,15 @@
 
     <MudPaper Elevation="10" Class="ma-5">
         <MudToolBar>
-            <MudIconButton Icon="@Icons.Material.Outlined.Pause" />
-            <MudIconButton Icon="@Icons.Material.Outlined.Replay" />
-            <MudIconButton Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />
-            
+            <MudIconButton OnClick="@(() => ChangeNoteText("hello", Severity.Warning, true))" Icon="@Icons.Material.Outlined.Pause" />
+            <MudIconButton Icon="@Icons.Material.Outlined.Replay" />            
+            <MudIconButton Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />            
+
             <MudSpacer />
             
-            <MudAlert Severity="Severity.Info" Variant="Variant.Filled" NoIcon="true" Class="my-2">Connected</MudAlert>
+            <div class="@_noteTextCss">
+                <MudAlert Severity="@_noteTextSeverity" Variant="Variant.Filled" NoIcon="@_noteTextNoIcon" Class="my-2">@_noteText</MudAlert>
+            </div>
 
             <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" />
         </MudToolBar>
