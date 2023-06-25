@@ -43,4 +43,12 @@ public partial class Stave
 
         await JS.InvokeVoidAsync("draw", _divId, noteNames, "q", beatCount, 4, "4/4", keyString, useTrebleClef ? "treble" : "bass");
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await SetDisplay();
+        }
+    }
 }

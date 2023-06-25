@@ -1,7 +1,13 @@
 ﻿@inherits LayoutComponentBase
+@inject ConductorService ConductorService
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-@Body
+@if (_ready)
+{
+    <main>
+        @Body
+    </main>
+}

@@ -1,5 +1,8 @@
-﻿<h3>SelectPreset</h3>
+﻿@inject DataService DataService
 
-@code {
+<h3>SelectPreset</h3>
 
+@foreach(var preset in _presets)
+{
+    <p>@preset.Name</p>
 }

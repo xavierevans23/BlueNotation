@@ -12,6 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddSingleton<MidiService>();
 builder.Services.AddSingleton<DataService>();
 builder.Services.AddSingleton<LocalStorageService>();
+builder.Services.AddSingleton<ConductorService>();
 builder.Services.AddMudServices();
 
 await builder.Build().RunAsync();

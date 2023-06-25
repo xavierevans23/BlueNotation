@@ -2,8 +2,8 @@
 
 public class PresetsData
 {
-    public List<NotesSessionPreset> NotePresets { get; set; } = new List<NotesSessionPreset>();
-    public List<KeysSessionPreset> KeyPresets { get; set; } = new List<KeysSessionPreset>();
+    public List<NotesSessionPreset> NotePresets { get; set; } = new() { new() };
+    public List<KeysSessionPreset> KeyPresets { get; set; } = new();
 
     public NotesSessionPreset? GetNotesPreset(string name)
     {

@@ -1,0 +1,23 @@
+﻿@inject MidiService MidiService
+@inject DataService DataService
+@inject IDialogService DialogService
+
+<div class="FillArea" style="display: flex; flex-direction: column; background-color: white; ">
+    <div style="min-width: 0; min-height: 0; overflow: hidden;">
+        <Stave />
+    </div>
+
+    <MudPaper Elevation="10" Class="ma-5">
+        <MudToolBar>
+            <MudIconButton Icon="@Icons.Material.Outlined.Pause" />
+            <MudIconButton Icon="@Icons.Material.Outlined.Replay" />
+            <MudIconButton Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />
+            
+            <MudSpacer />
+            
+            <MudAlert Severity="Severity.Info" Variant="Variant.Filled" NoIcon="true" Class="my-2">Connected</MudAlert>
+
+            <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" />
+        </MudToolBar>
+    </MudPaper>
+</div>
