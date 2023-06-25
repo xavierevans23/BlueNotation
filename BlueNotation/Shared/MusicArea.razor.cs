@@ -13,8 +13,6 @@ public partial class MusicArea
 
     private async Task ChangeNoteText(string text, Severity severity, bool icon)
     {
-        Console.WriteLine(text);
-
         _noteTextCss = "";
         await Task.Delay(100);
         await InvokeAsync(StateHasChanged);

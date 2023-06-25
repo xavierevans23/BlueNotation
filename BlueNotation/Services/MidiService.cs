@@ -59,7 +59,7 @@ public class MidiService
                 break;
             default:
                 _instance.MidiStatus = MidiStatus.Error;
-                _instance.MidiError = "Unknown error.";
+                _instance.MidiError = "Unknown error";
                 break;
         }
 

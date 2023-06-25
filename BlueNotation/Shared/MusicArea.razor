@@ -8,18 +8,23 @@
     </div>
 
     <MudPaper Elevation="10" Class="ma-5">
-        <MudToolBar>
-            <MudIconButton OnClick="@(() => ChangeNoteText("hello", Severity.Warning, true))" Icon="@Icons.Material.Outlined.Pause" />
-            <MudIconButton Icon="@Icons.Material.Outlined.Replay" />            
-            <MudIconButton Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />            
+        <MudToolBar Style="padding-left: 8px; padding-right: 0px;">
+            <MudIconButton Icon="@Icons.Material.Outlined.Pause" />
+            <MudIconButton Icon="@Icons.Material.Outlined.Replay" />
+            <MudIconButton Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />
+
 
             <MudSpacer />
-            
+
+
             <div class="@_noteTextCss">
                 <MudAlert Severity="@_noteTextSeverity" Variant="Variant.Filled" NoIcon="@_noteTextNoIcon" Class="my-2">@_noteText</MudAlert>
             </div>
-
-            <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" />
+            <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                <MudMenuItem Icon="@Icons.Material.Outlined.FolderOpen">Load preset</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Outlined.Insights">Statistics</MudMenuItem>
+                <MudMenuItem Icon="@Icons.Material.Outlined.Tune">Options</MudMenuItem>
+            </MudMenu>
         </MudToolBar>
     </MudPaper>
 </div>
