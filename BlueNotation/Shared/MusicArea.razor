@@ -4,7 +4,7 @@
 
 <div class="FillArea" style="display: flex; flex-direction: column; background-color: white; ">
     <div style="min-width: 0; min-height: 0; overflow: hidden;">
-        <Stave @ref="_stave"/>
+        <Stave @ref="_stave" />
     </div>
 
     @if (_topOverlay is not null || _bottomOverlay is not null)
@@ -18,7 +18,7 @@
 
     @if (_leftText is not null || _rightText is not null)
     {
-        <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-direction: row;  padding: 128px" class="FillArea">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-direction: row;  padding: 24px" class="FillArea">
             <h1>@_leftText</h1>
             <h1>@_rightText</h1>
         </div>
@@ -27,7 +27,7 @@
     @if (_showStats)
     {
         <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;" class="FillArea">
-            @if(_session is NotesSession notes)
+            @if (_session is NotesSession notes)
             {
                 <p>Notes</p>
                 <p>@(notes.TotalPerfect) / @(notes.TotalNotesPlayed)</p>
@@ -37,7 +37,7 @@
                     <p>@(note.Key) @(note.Value.Latency)</p>
                 }
             }
-            
+
             @if (_session is KeysSession keys)
             {
                 <p>Keys</p>
@@ -53,14 +53,25 @@
 
     <MudPaper Elevation="10" Class="ma-5">
         <MudToolBar Style="padding-left: 8px; padding-right: 0px;">
-            <MudIconButton OnClick="PlayPausePressed" Icon="@(_showPlayButton ? Icons.Material.Outlined.PlayArrow : Icons.Material.Outlined.Pause)" />
-            <MudIconButton OnClick="RestartPressed" Icon="@Icons.Material.Outlined.Replay" />
-            <MudIconButton Disabled="_disableFinishButton" OnClick="FinishPressed" Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />
+            <MudTooltip Placement="Placement.Top" Delay="600" Text="@(_showPlayButton ? "Play" : "Pause")">
+                <MudIconButton OnClick="PlayPausePressed" Icon="@(_showPlayButton ? Icons.Material.Outlined.PlayArrow : Icons.Material.Outlined.Pause)" />
+            </MudTooltip>
+
+            <MudTooltip Placement="Placement.Top" Delay="600" Text="Restart">
+                <MudIconButton OnClick="RestartPressed" Icon="@Icons.Material.Outlined.Replay" />
+            </MudTooltip>
+
+            @if (!_disableFinishButton)
+            {
+                <MudTooltip Placement="Placement.Top" Delay="600" Text="See results">
+                    <MudIconButton OnClick="FinishPressed" Icon="@Icons.Material.Outlined.Done" Class="mr-5" />
+                </MudTooltip>
+            }
 
             <MudSpacer />
 
             <div class="@_noteTextCss">
-                <MudAlert Severity="@_noteTextSeverity" Variant="Variant.Filled" NoIcon="@_noteTextNoIcon" Class="my-2">@_noteText</MudAlert>
+                <MudAlert Style="min-width: 216px" ContentAlignment="HorizontalAlignment.Center" Severity="@_noteTextSeverity" Variant="Variant.Filled" NoIcon="@_noteTextNoIcon" Class="my-2">@_noteText</MudAlert>
             </div>
 
             <MudMenu Icon="@Icons.Material.Filled.MoreVert">
@@ -70,5 +81,5 @@
             </MudMenu>
         </MudToolBar>
     </MudPaper>
-    
+
 </div>

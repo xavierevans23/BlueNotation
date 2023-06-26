@@ -19,8 +19,9 @@ public partial class MusicArea : IDisposable
     private string? _bottomOverlay;
 
     private readonly Stopwatch _timer = new();
+    private readonly Stopwatch _latencyTimer = new();
     private State _state = State.Ready;
-    private SessionPreset _preset = new KeysSessionPreset();
+    private SessionPreset _preset = new NotesSessionPreset();
     private ISession _session;
 
     private bool _showStats = false;
@@ -39,7 +40,7 @@ public partial class MusicArea : IDisposable
 
     public MusicArea()
     {
-        _session = new KeysSession((KeysSessionPreset)_preset);
+        _session = new NotesSession((NotesSessionPreset)_preset);
     }
 
     private async Task SetReady()
@@ -57,6 +58,7 @@ public partial class MusicArea : IDisposable
         }
 
         _timer.Reset();
+        _latencyTimer.Restart();
         _clock?.Dispose();
 
         await ShowOverlayText("Press any key to start", "");
@@ -79,6 +81,7 @@ public partial class MusicArea : IDisposable
         _state = State.Playing;
 
         _timer.Start();
+        _latencyTimer.Restart();
         var clockTask = StartClock();
 
         _showPlayButton = false;
@@ -127,7 +130,7 @@ public partial class MusicArea : IDisposable
         _leftText = null;
         _rightText = null;
         _showPlayButton = true;
-        _disableFinishButton = false;
+        _disableFinishButton = true;
 
         _session.ApplyStatistics(DataService.Statistics);
         await DataService.SaveData();
@@ -234,9 +237,10 @@ public partial class MusicArea : IDisposable
                 await SetPlay();
                 return;
             case State.Playing:
-                _session.NotePlayed(note, 100);
+                _session.NotePlayed(note, (int)_latencyTimer.Elapsed.TotalMilliseconds);
                 await ChangeNoteText(NoteHelper.GetNote(note).ToString());
                 await UpdateNoteDisplay();
+                _latencyTimer.Restart();
                 return;
             case State.Paused:
                 await ChangeNoteText(NoteHelper.GetNote(note).ToString());
