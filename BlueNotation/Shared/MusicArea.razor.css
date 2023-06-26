@@ -1,4 +1,4 @@
-﻿@keyframes flashAnimation {
+﻿@keyframes flashAnimationA {
     from {
         opacity: 50%
     }
@@ -8,8 +8,26 @@
     }
 }
 
-.flash {
-    animation-name: flashAnimation;
+@keyframes flashAnimationB {
+    from {
+        opacity: 50%
+    }
+
+    to {
+        opacity: 100%
+    }
+}
+
+.flashA {
+    animation-name: flashAnimationA;
     animation-duration: 0.3s;
     animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+.flashB {
+    animation-name: flashAnimationB;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
 }

@@ -8,7 +8,8 @@ namespace BlueNotation.Shared;
 
 public partial class MusicArea : IDisposable
 {
-    private const string FlashCss = "flash";
+    private const string FlashCssA = "flashA";
+    private const string FlashCssB = "flashB";
     private string _noteText = "Connecting";
     private string _noteTextCss = "";
     private Severity _noteTextSeverity = Severity.Info;
@@ -19,7 +20,7 @@ public partial class MusicArea : IDisposable
 
     private readonly Stopwatch _timer = new();
     private State _state = State.Ready;
-    private SessionPreset _preset = new NotesSessionPreset();
+    private SessionPreset _preset = new KeysSessionPreset();
     private ISession _session;
 
     private bool _showStats = false;
@@ -38,7 +39,7 @@ public partial class MusicArea : IDisposable
 
     public MusicArea()
     {
-        _session = new NotesSession((NotesSessionPreset)_preset);
+        _session = new KeysSession((KeysSessionPreset)_preset);
     }
 
     private async Task SetReady()
@@ -58,7 +59,7 @@ public partial class MusicArea : IDisposable
         _timer.Reset();
         _clock?.Dispose();
 
-        await ShowOverlayText("Press any key to start","");
+        await ShowOverlayText("Press any key to start", "");
 
         if (_stave is not null)
         {
@@ -97,7 +98,7 @@ public partial class MusicArea : IDisposable
         _clock?.Dispose();
 
         await ShowOverlayText("Paused", "Press any key to continue");
-        
+
         if (_stave is not null)
         {
             await _stave.SetDisplay();
@@ -192,7 +193,7 @@ public partial class MusicArea : IDisposable
 
     private void PresetsPressed()
     {
-        
+
     }
 
     private void StatisticsPressed()
@@ -217,7 +218,7 @@ public partial class MusicArea : IDisposable
             case State.Playing:
                 await UpdateNoteDisplay();
                 return;
-            case State.Paused:                
+            case State.Paused:
                 return;
             case State.Finished:
                 return;
@@ -235,7 +236,7 @@ public partial class MusicArea : IDisposable
             case State.Playing:
                 _session.NotePlayed(note, 100);
                 await ChangeNoteText(NoteHelper.GetNote(note).ToString());
-                await UpdateNoteDisplay();                
+                await UpdateNoteDisplay();
                 return;
             case State.Paused:
                 await ChangeNoteText(NoteHelper.GetNote(note).ToString());
@@ -263,11 +264,7 @@ public partial class MusicArea : IDisposable
     }
     private async Task ChangeNoteText(string text, Severity severity, bool icon)
     {
-        _noteTextCss = "";
-        await Task.Delay(100);
-        await InvokeAsync(StateHasChanged);
-
-        _noteTextCss = FlashCss;
+        _noteTextCss = _noteTextCss == FlashCssA ? FlashCssB : FlashCssA;
         _noteText = text;
         _noteTextSeverity = severity;
         _noteTextNoIcon = !icon;
@@ -346,9 +343,28 @@ public partial class MusicArea : IDisposable
 
     private async Task UpdateNoteDisplay()
     {
-        //check end condition
+        if (_state == State.Playing)
+        {
+            if (_preset.EndMode == EndMode.Timer)
+            {
+                if (_timer.Elapsed.TotalSeconds > _preset.TimerSeconds)
+                {
+                    await SetFinished();
+                    return;
+                }
+            }
+            if (_preset.EndMode == EndMode.QuestionCount)
+            {
+                if ((_session is NotesSession notes && notes.TotalNotesPlayed >= _preset.QuestionCount) || (
+                    _session is KeysSession keys && keys.TotalScalesPlayed >= _preset.QuestionCount))
+                {
+                    await SetFinished();
+                    return;
+                }
+            }
+        }
 
-        _leftText = _timer.Elapsed.ToString();
+        _leftText = _timer.Elapsed.ToString(@"mm\:ss");
         _rightText = _session.TotalAttempts.ToString();
 
         if (_stave is not null)
