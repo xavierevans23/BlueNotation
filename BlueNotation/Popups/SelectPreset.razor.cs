@@ -1,10 +1,30 @@
 ﻿using BlueNotation.Game;
+using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace BlueNotation.Popups;
 
 public partial class SelectPreset
 {
     private List<SessionPreset> _presets = new();
+
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+
+    private async Task Select(SessionPreset preset)
+    {
+        if (ConductorService.MusicArea is not null)
+        {
+            await ConductorService.MusicArea.NewPreset(preset);
+        }
+
+        MudDialog?.Close(DialogResult.Ok(true));
+    }
+
+    private async Task Delete(SessionPreset preset) 
+    {
+        DataService.PresetsData.DeletePreset(preset);
+        await DataService.SavePresets();
+    }
 
     protected override void OnParametersSet()
     {

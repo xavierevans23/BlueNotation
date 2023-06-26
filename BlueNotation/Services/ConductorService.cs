@@ -1,4 +1,6 @@
-﻿namespace BlueNotation.Services;
+﻿using BlueNotation.Shared;
+
+namespace BlueNotation.Services;
 
 public class ConductorService
 {
@@ -6,6 +8,8 @@ public class ConductorService
     private readonly MidiService _midiService;
 
     private bool _started = false;
+
+    public MusicArea? MusicArea { get; set; } = null;
 
     public ConductorService(DataService dataService, MidiService midiService)
     {

@@ -27,33 +27,45 @@ public class DataService
 
         if (xml is not null)
         {
-            DeserializeData(xml);
+            try
+            {
+                DeserializeData(xml);
+                return;
+            }
+            catch (Exception e) when (e is InvalidOperationException || e is ArgumentException)
+            {
+                Console.WriteLine("Local storage was corrupt (data).");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Found no local storage (data).");
         }
 
-        Console.WriteLine("Found no local storage.");
+        Statistics.UnloadData();
     }
 
-    public string SerializeData() 
+    public string SerializeData()
     {
         Statistics.LoadData();
 
         var serializer = new XmlSerializer(Statistics.GetType());
 
-        using StringWriter textWriter = new();        
+        using StringWriter textWriter = new();
         serializer.Serialize(textWriter, Statistics);
-        
+
         return textWriter.ToString();
     }
 
-    public void DeserializeData(string xml) 
+    public void DeserializeData(string xml)
     {
         using var reader = new StringReader(xml);
         var deserializer = new XmlSerializer(Statistics.GetType());
 
-        if (deserializer.Deserialize(reader) is Statistics stats) 
+        if (deserializer.Deserialize(reader) is Statistics stats)
         {
             Statistics = stats;
-            
+
             Statistics.UnloadData();
             return;
         }
@@ -68,12 +80,26 @@ public class DataService
 
     public async Task LoadPresets()
     {
+
         var xml = await _storageService.LoadPresets();
 
         if (xml is not null)
         {
-            DeserializePresets(xml);
+            try
+            {
+                DeserializePresets(xml);
+                return;
+            }
+            catch (Exception e) when (e is InvalidOperationException || e is ArgumentException)
+            {
+                Console.WriteLine("Local storage was corrupt (presets).");
+            }
         }
+        else
+        {
+            Console.WriteLine("Found no local storage (presets).");
+        }
+        
     }
 
     public string SerializePresets()

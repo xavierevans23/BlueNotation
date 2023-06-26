@@ -1,8 +1,34 @@
 ﻿@inject DataService DataService
+@inject ConductorService ConductorService
 
-<h3>SelectPreset</h3>
+<MudDialog>
+    <DialogContent>
+        <div class="pa-5" style="width: 300px;">
 
-@foreach(var preset in _presets)
-{
-    <p>@preset.Name</p>
-}
+            @if (_presets.Any())
+            {
+                <MudSimpleTable Dense="true" Hover="true" Style="overflow-x: auto;">
+
+                    <tbody>
+                        @foreach (var preset in _presets)
+                        {
+                            <tr>
+                                <td>
+                                    <MudButton OnClick="() => Select(preset)">@preset.Name</MudButton>
+                                </td>
+
+                                <td>
+                                    <MudIconButton OnClick="() => Delete(preset)" Icon="@Icons.Material.Filled.Delete" aria-label="delete"></MudIconButton>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </MudSimpleTable>
+            }
+            else
+            {
+                <h3>No presets.</h3>
+            }
+        </div>
+    </DialogContent>
+</MudDialog>

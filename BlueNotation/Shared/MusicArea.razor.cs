@@ -3,11 +3,14 @@ using BlueNotation.Services;
 using System.Diagnostics;
 using BlueNotation.Game;
 using BlueNotation.Music;
+using BlueNotation.Popups;
 
 namespace BlueNotation.Shared;
 
 public partial class MusicArea : IDisposable
 {
+    private readonly static DialogOptions DialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, CloseButton = true, DisableBackdropClick = true };
+
     private const string FlashCssA = "flashA";
     private const string FlashCssB = "flashB";
     private string _noteText = "Connecting";
@@ -40,14 +43,22 @@ public partial class MusicArea : IDisposable
 
     public MusicArea()
     {
-        var startPreset = new KeysSessionPreset
+        var startPreset = new NotesSessionPreset
         {
             ClefMode = ClefMode.Both,
-            EndMode = EndMode.Timer
+            EndMode = EndMode.Infinite,
+            AllowRepeats = false,
+            BassNoteRange = new() { 48, 50, 52, 53, 55, 57, 59, 60 },
+            TrebleNoteRange = new() { 60, 62, 64, 65, 67, 69, 71, 72},
+            MaxNotes = 1,
+            MinNotes = 1,
+            Name = "Default",
+            QuestionCount = 10,
+            TimerSeconds = 30,
         };
 
         _preset = startPreset;
-        _session = new KeysSession(startPreset);
+        _session = new NotesSession(startPreset);
     }
 
     private async Task SetReady()
@@ -210,7 +221,7 @@ public partial class MusicArea : IDisposable
 
     private void PresetsPressed()
     {
-
+        DialogService.Show<SelectPreset>("Select preset", DialogOptions);
     }
 
     private void StatisticsPressed()
@@ -221,9 +232,10 @@ public partial class MusicArea : IDisposable
     {
     }
 
-    public void NewPreset(SessionPreset preset)
+    public async Task NewPreset(SessionPreset preset)
     {
-
+        _preset = preset;
+        await SetReady();
     }
 
     private async Task ClockTick()
@@ -278,6 +290,7 @@ public partial class MusicArea : IDisposable
         if (firstRender)
         {
             await SetReady();
+            ConductorService.MusicArea = this;
         }
     }
     private async Task ChangeNoteText(string text, Severity severity, bool icon)
@@ -388,12 +401,12 @@ public partial class MusicArea : IDisposable
 
             if (_session is NotesSession notes)
             {
-                _rightText = $"#{notes.TotalNotesPlayed}";
+                _rightText = $"#{notes.TotalNotesPlayed + 1}";
             }
 
             if (_session is KeysSession keys)
             {
-                _rightText = $"#{keys.TotalScalesPlayed}";
+                _rightText = $"#{keys.TotalScalesPlayed + 1}";
             }
         }
         if (_preset.EndMode == EndMode.QuestionCount)
@@ -417,12 +430,12 @@ public partial class MusicArea : IDisposable
 
             if (_session is NotesSession notes)
             {
-                _rightText = $"#{notes.TotalNotesPlayed}";
+                _rightText = $"#{notes.TotalNotesPlayed + 1}";
             }
 
             if (_session is KeysSession keys)
             {
-                _rightText = $"#{keys.TotalScalesPlayed}";
+                _rightText = $"#{keys.TotalScalesPlayed + 1}";
             }
         }
 
@@ -473,6 +486,11 @@ public partial class MusicArea : IDisposable
                 MidiService.StatusChanged -= MidiStatusChanged;
                 MidiService.NoteDown -= MidiNotePlayed;
                 _clock?.Dispose();
+
+                if (ConductorService.MusicArea == this)
+                {
+                    ConductorService.MusicArea = null;
+                }
             }
 
             _disposed = true;
