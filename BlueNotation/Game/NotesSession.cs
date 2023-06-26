@@ -88,6 +88,7 @@ public class NotesSession : ISession
             }
 
             var copy = range.ToList();
+            var unordered = new List<int>();
 
             while (count > 0 && copy.Count > 0)
             {
@@ -95,7 +96,12 @@ public class NotesSession : ISession
 
                 var chosenNote = copy[_random.Next(copy.Count)];
                 copy.Remove(chosenNote);
-                _notes.Enqueue(chosenNote);
+                unordered.Add(chosenNote);
+            }
+
+            foreach (var note in unordered.Order())
+            {
+                _notes.Enqueue(note);
             }
 
             UseTrebleClef = clef;

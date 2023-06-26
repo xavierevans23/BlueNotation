@@ -21,7 +21,7 @@ public partial class MusicArea : IDisposable
     private readonly Stopwatch _timer = new();
     private readonly Stopwatch _latencyTimer = new();
     private State _state = State.Ready;
-    private SessionPreset _preset = new NotesSessionPreset();
+    private SessionPreset _preset;
     private ISession _session;
 
     private bool _showStats = false;
@@ -40,7 +40,14 @@ public partial class MusicArea : IDisposable
 
     public MusicArea()
     {
-        _session = new NotesSession((NotesSessionPreset)_preset);
+        var startPreset = new NotesSessionPreset();
+
+        startPreset.ClefMode = ClefMode.Both;
+        startPreset.MaxNotes = 5;
+        startPreset.EndMode = EndMode.Infinite;
+
+        _preset = startPreset;
+        _session = new NotesSession(startPreset);
     }
 
     private async Task SetReady()
@@ -368,8 +375,51 @@ public partial class MusicArea : IDisposable
             }
         }
 
-        _leftText = _timer.Elapsed.ToString(@"mm\:ss");
-        _rightText = _session.TotalAttempts.ToString();
+        if (_preset.EndMode == EndMode.Timer)
+        {
+            _leftText = (TimeSpan.FromSeconds(_preset.TimerSeconds) - _timer.Elapsed).ToString(@"mm\:ss");
+
+            if (_session is NotesSession notes)
+            {
+                _rightText = $"#{notes.TotalNotesPlayed}";
+            }
+
+            if (_session is KeysSession keys)
+            {
+                _rightText = $"#{keys.TotalScalesPlayed}";
+            }
+        }
+        if (_preset.EndMode == EndMode.QuestionCount)
+        {
+            _leftText = _timer.Elapsed.ToString(@"mm\:ss");
+            _rightText = _session.TotalAttempts.ToString();
+
+            if (_session is NotesSession notes)
+            {
+                _rightText = $"{notes.TotalNotesPlayed}/{_preset.QuestionCount}";
+            }
+
+            if (_session is KeysSession keys)
+            {
+                _rightText = $"{keys.TotalScalesPlayed}/{_preset.QuestionCount}";
+            }
+        }
+        if (_preset.EndMode == EndMode.Infinite)
+        {
+            _leftText = null;
+
+            if (_session is NotesSession notes)
+            {
+                _rightText = $"#{notes.TotalNotesPlayed}";
+            }
+
+            if (_session is KeysSession keys)
+            {
+                _rightText = $"#{keys.TotalScalesPlayed}";
+            }
+        }
+
+
 
         if (_stave is not null)
         {
