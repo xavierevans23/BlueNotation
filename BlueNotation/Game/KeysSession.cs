@@ -3,7 +3,7 @@ using BlueNotation.Music;
 
 namespace BlueNotation.Game;
 
-public class KeysSession
+public class KeysSession : ISession
 {
     private readonly Random _random = new();
     private readonly KeysSessionPreset _preset;

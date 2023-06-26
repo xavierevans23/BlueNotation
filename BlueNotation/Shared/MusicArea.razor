@@ -4,27 +4,71 @@
 
 <div class="FillArea" style="display: flex; flex-direction: column; background-color: white; ">
     <div style="min-width: 0; min-height: 0; overflow: hidden;">
-        <Stave />
+        <Stave @ref="_stave"/>
     </div>
+
+    @if (_topOverlay is not null || _bottomOverlay is not null)
+    {
+        <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;" class="FillArea">
+            <h1>@_topOverlay</h1>
+            <h2>@_bottomOverlay</h2>
+            <div style="height: 96px;"></div>
+        </div>
+    }
+
+    @if (_leftText is not null || _rightText is not null)
+    {
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-direction: row;  padding: 128px" class="FillArea">
+            <h1>@_leftText</h1>
+            <h2>@_rightText</h2>
+        </div>
+    }
+
+    @if (_showStats)
+    {
+        <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;" class="FillArea">
+            @if(_session is NotesSession notes)
+            {
+                <p>Notes</p>
+                <p>@(notes.TotalPerfect) / @(notes.TotalNotesPlayed)</p>
+
+                @foreach (var note in notes.GetNoteStatistics())
+                {
+                    <p>@(note.Key) @(note.Value.Latency)</p>
+                }
+            }
+            
+            @if (_session is KeysSession keys)
+            {
+                <p>Keys</p>
+                <p>@(keys.TotalScalePerfect) / @(keys.TotalScalesPlayed)</p>
+
+                @foreach (var key in keys.GetKeyStatistics())
+                {
+                    <p>@(key.Key) @(key.Value.Latency)</p>
+                }
+            }
+        </div>
+    }
 
     <MudPaper Elevation="10" Class="ma-5">
         <MudToolBar Style="padding-left: 8px; padding-right: 0px;">
-            <MudIconButton Icon="@Icons.Material.Outlined.Pause" />
-            <MudIconButton Icon="@Icons.Material.Outlined.Replay" />
-            <MudIconButton Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />
-
+            <MudIconButton OnClick="PlayPausePressed" Icon="@(_showPlayButton ? Icons.Material.Outlined.PlayArrow : Icons.Material.Outlined.Pause)" />
+            <MudIconButton OnClick="RestartPressed" Icon="@Icons.Material.Outlined.Replay" />
+            <MudIconButton Disabled="_disableFinishButton" OnClick="FinishPressed" Icon="@Icons.Material.Outlined.SkipNext" Class="mr-5" />
 
             <MudSpacer />
-
 
             <div class="@_noteTextCss">
                 <MudAlert Severity="@_noteTextSeverity" Variant="Variant.Filled" NoIcon="@_noteTextNoIcon" Class="my-2">@_noteText</MudAlert>
             </div>
+
             <MudMenu Icon="@Icons.Material.Filled.MoreVert">
-                <MudMenuItem Icon="@Icons.Material.Outlined.FolderOpen">Load preset</MudMenuItem>
-                <MudMenuItem Icon="@Icons.Material.Outlined.Insights">Statistics</MudMenuItem>
-                <MudMenuItem Icon="@Icons.Material.Outlined.Tune">Options</MudMenuItem>
+                <MudMenuItem OnClick="PresetsPressed" Icon="@Icons.Material.Outlined.FolderOpen">Load preset</MudMenuItem>
+                <MudMenuItem OnClick="StatisticsPressed" Icon="@Icons.Material.Outlined.Insights">Statistics</MudMenuItem>
+                <MudMenuItem OnClick="OptionsPressed" Icon="@Icons.Material.Outlined.Tune">Options</MudMenuItem>
             </MudMenu>
         </MudToolBar>
     </MudPaper>
+    
 </div>

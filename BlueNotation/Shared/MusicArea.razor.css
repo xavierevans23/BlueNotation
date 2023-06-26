@@ -11,4 +11,5 @@
 .flash {
     animation-name: flashAnimation;
     animation-duration: 0.3s;
+    animation-timing-function: ease-out;
 }

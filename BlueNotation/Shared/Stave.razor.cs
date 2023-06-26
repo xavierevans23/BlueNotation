@@ -5,6 +5,10 @@ namespace BlueNotation.Shared;
 
 public partial class Stave
 {
+    private const string FadeOutCss = "fadeOut";
+    private const string FadeInCss = "fadeIn";  
+    private string _css = FadeInCss;
+
     private readonly string _divId;
 
     private static readonly Dictionary<Accidental, string> AccidentalNames = new()
@@ -50,5 +54,17 @@ public partial class Stave
         {
             await SetDisplay();
         }
+    }
+
+    public async Task FadeOut()
+    {
+        _css = FadeOutCss;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task FadeIn()
+    {
+        _css = FadeInCss;
+        await InvokeAsync(StateHasChanged);
     }
 }
