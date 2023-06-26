@@ -24,6 +24,7 @@ public partial class SelectPreset
     {
         DataService.PresetsData.DeletePreset(preset);
         await DataService.SavePresets();
+        await InvokeAsync(StateHasChanged);
     }
 
     protected override void OnParametersSet()

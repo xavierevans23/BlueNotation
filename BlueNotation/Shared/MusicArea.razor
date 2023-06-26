@@ -41,13 +41,13 @@
                         }
                         else
                         {
-                            <p class="bigText">@((notes.TotalPerfect * 100) / (notes.TotalNotesPlayed))%</p>                            
+                            <p class="bigText">@((notes.TotalPerfect * 100) / (notes.TotalNotesPlayed))%</p>
                         }
                     </div>
 
                     <div style="width: 36px"></div>
 
-                    <div style="display: flex; justify-content: space-around; align-items:center; flex-direction: column;">                        
+                    <div style="display: flex; justify-content: space-around; align-items:center; flex-direction: column;">
                         @if (notes.TotalNotesPlayed == 0)
                         {
                             <h1 class="bigText">0</h1>
@@ -69,28 +69,22 @@
 
                         <div style="flex-basis: 8px;"></div>
 
-                        <MudSimpleTable Elevation="10" Dense="true" Hover="true" Style="overflow-x: auto;">
-                            <thead>
-                                <tr>
-                                    <th>Note</th>
-                                    <th>Accuracy</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
-                            
-                            <tbody>
-                                @foreach (var note in notes.GetTrebleNoteStatistics())
-                                {
-                                    <tr>
-                                        <td>@(note.Key)</td>
-                                        <td>@((note.Value.TimesPlayed * 100) / note.Value.Attempts)%</td>
-                                        <td>@((((note.Value.Latency) / (note.Value.TimesPlayed * 10)) / 100f).ToString("0.00"))</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </MudSimpleTable>
+                        <MudTable Items="notes.GetTrebleNoteStatistics()" Elevation="10" Dense="true" Hover="true" Style="overflow-x: auto;">
+                            <HeaderContent>
+
+                                <MudTh><MudTableSortLabel SortBy="new Func<KeyValuePair<Note, Data.StatisticsItemHistory>, object>(x=>NoteHelper.GetMidi(x.Key))">Note</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortBy="new Func<KeyValuePair<Note, Data.StatisticsItemHistory>, object>(x=>((x.Value.TimesPlayed * 100) / x.Value.Attempts))">Accuracy</MudTableSortLabel></MudTh>
+                                <MudTh><MudTableSortLabel SortBy="new Func<KeyValuePair<Note, Data.StatisticsItemHistory>, object>(x=>((((x.Value.Latency) / (x.Value.TimesPlayed * 10)) / 100f)))">Time</MudTableSortLabel></MudTh>
+                            </HeaderContent>
+
+                            <RowTemplate>
+                                <MudTd DataLabel="Note">@context.Key</MudTd>
+                                <MudTd DataLabel="Accuracy">@((context.Value.TimesPlayed * 100) / context.Value.Attempts)%</MudTd>
+                                <MudTd DataLabel="Time">@((((context.Value.Latency) / (context.Value.TimesPlayed * 10)) / 100f).ToString("0.00"))</MudTd>
+                                </RowTemplate>
+                        </MudTable>
                     </div>
-                    
+
                     <div style="width: 16px;"></div>
 
                     <div style="display: flex; flex-direction: column; align-items: center;">
@@ -98,26 +92,20 @@
 
                         <div style="flex-basis: 8px;"></div>
 
-                        <MudSimpleTable Elevation="10" Dense="true" Hover="true" Style="overflow-x: auto;">
-                            <thead>
-                                <tr>
-                                    <th>Note</th>
-                                    <th>Accuracy</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
+                            <MudTable Items="notes.GetBassNoteStatistics()" Elevation="10" Dense="true" Hover="true" Style="overflow-x: auto;">
+                                <HeaderContent>
 
-                            <tbody>
-                                @foreach (var note in notes.GetBassNoteStatistics())
-                                {
-                                    <tr>
-                                        <td>@(note.Key)</td>
-                                        <td>@((note.Value.TimesPlayed * 100) / note.Value.Attempts)%</td>
-                                        <td>@((((note.Value.Latency) / (note.Value.TimesPlayed * 10)) / 100f).ToString("0.00"))</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </MudSimpleTable>
+                                    <MudTh><MudTableSortLabel SortBy="new Func<KeyValuePair<Note, Data.StatisticsItemHistory>, object>(x=>NoteHelper.GetMidi(x.Key))">Note</MudTableSortLabel></MudTh>
+                                    <MudTh><MudTableSortLabel SortBy="new Func<KeyValuePair<Note, Data.StatisticsItemHistory>, object>(x=>((x.Value.TimesPlayed * 100) / x.Value.Attempts))">Accuracy</MudTableSortLabel></MudTh>
+                                    <MudTh><MudTableSortLabel SortBy="new Func<KeyValuePair<Note, Data.StatisticsItemHistory>, object>(x=>((((x.Value.Latency) / (x.Value.TimesPlayed * 10)) / 100f)))">Time</MudTableSortLabel></MudTh>
+                                </HeaderContent>
+
+                                <RowTemplate>
+                                    <MudTd DataLabel="Note">@context.Key</MudTd>
+                                    <MudTd DataLabel="Accuracy">@((context.Value.TimesPlayed * 100) / context.Value.Attempts)%</MudTd>
+                                <MudTd DataLabel="Time">@((((context.Value.Latency) / (context.Value.TimesPlayed * 10)) / 100f).ToString("0.00"))</MudTd>
+                                </RowTemplate>
+                            </MudTable>
                     </div>
                 </div>
             }
