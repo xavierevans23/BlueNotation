@@ -27,26 +27,139 @@
     @if (_showStats)
     {
         <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;" class="FillArea">
+
             @if (_session is NotesSession notes)
             {
-                <p>Notes</p>
-                <p>@(notes.TotalPerfect) / @(notes.TotalNotesPlayed)</p>
+                <div style="display: flex; flex-direction: row;">
+                    <div style="display: flex; justify-content: space-around; flex-direction: column">
+                        @if (notes.TotalNotesPlayed == 0)
+                        {
+                            <p class="bigText">0%</p>
+                        }
+                        else
+                        {
+                            <p class="bigText">@((notes.TotalPerfect * 100) / (notes.TotalNotesPlayed))%</p>                            
+                        }
+                    </div>
 
-                @foreach (var note in notes.GetNoteStatistics())
-                {
-                    <p>@(note.Key) @(note.Value.Latency)</p>
-                }
+                    <div style="width: 36px"></div>
+
+                    <div style="display: flex; justify-content: space-around; align-items:center; flex-direction: column;">                        
+                        @if (notes.TotalNotesPlayed == 0)
+                        {
+                            <h1 class="bigText">0</h1>
+                        }
+                        else
+                        {
+                            <h1>@(notes.TotalPerfect) / @(notes.TotalNotesPlayed)</h1>
+                        }
+
+                        <h1>@(_timer.Elapsed.ToString(@"mm\:ss"))</h1>
+                    </div>
+                </div>
+
+                <div style="flex-basis: 36px;"></div>
+
+                <div style="display: flex; flex-direction: row;">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <h1>Treble</h1>
+
+                        <div style="flex-basis: 8px;"></div>
+
+                        <MudSimpleTable Elevation="10" Dense="true" Hover="true" Style="overflow-x: auto;">
+                            <thead>
+                                <tr>
+                                    <th>Note</th>
+                                    <th>Accuracy</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                @foreach (var note in notes.GetTrebleNoteStatistics())
+                                {
+                                    <tr>
+                                        <td>@(note.Key)</td>
+                                        <td>@((note.Value.TimesPlayed * 100) / note.Value.Attempts)%</td>
+                                        <td>@((((note.Value.Latency) / (note.Value.TimesPlayed * 10)) / 100f).ToString("0.00"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </MudSimpleTable>
+                    </div>
+                    
+                    <div style="width: 16px;"></div>
+
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <h1>Bass</h1>
+
+                        <div style="flex-basis: 8px;"></div>
+
+                        <MudSimpleTable Elevation="10" Dense="true" Hover="true" Style="overflow-x: auto;">
+                            <thead>
+                                <tr>
+                                    <th>Note</th>
+                                    <th>Accuracy</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var note in notes.GetBassNoteStatistics())
+                                {
+                                    <tr>
+                                        <td>@(note.Key)</td>
+                                        <td>@((note.Value.TimesPlayed * 100) / note.Value.Attempts)%</td>
+                                        <td>@((((note.Value.Latency) / (note.Value.TimesPlayed * 10)) / 100f).ToString("0.00"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </MudSimpleTable>
+                    </div>
+                </div>
             }
 
             @if (_session is KeysSession keys)
             {
-                <p>Keys</p>
-                <p>@(keys.TotalScalePerfect) / @(keys.TotalScalesPlayed)</p>
+                <div style="display: flex; flex-direction: row;">
+                    <div style="display: flex; justify-content: space-around; flex-direction: column">
+                        <p class="bigText">@((keys.TotalScalePerfect * 100) / (keys.TotalScalesPlayed))%</p>
+                    </div>
 
-                @foreach (var key in keys.GetKeyStatistics())
-                {
-                    <p>@(key.Key) @(key.Value.Latency)</p>
-                }
+                    <div style="width: 36px"></div>
+
+                    <div style="display: flex; justify-content: space-around; align-items:center; flex-direction: column;">
+                        <h1>@(keys.TotalScalePerfect) / @(keys.TotalScalesPlayed)</h1>
+
+                        <h1>@(_timer.Elapsed.ToString(@"mm\:ss"))</h1>
+                    </div>
+                </div>
+
+                <div style="flex-basis: 36px;"></div>
+
+                <div style="display: flex; flex-direction: column; align-items: center;">
+
+                    <MudSimpleTable Elevation="10" Dense="true" Hover="true" Style="overflow-x: auto;">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Accuracy</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var key in keys.GetKeyStatistics())
+                            {
+                                <tr>
+                                    <td>@(key.Key)</td>
+                                    <td>@((key.Value.TimesPlayed * 100) / key.Value.Attempts)%</td>
+                                    <td>@((((key.Value.Latency) / (key.Value.TimesPlayed * 10)) / 100f).ToString("0.00"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </MudSimpleTable>
+                </div>
             }
         </div>
     }

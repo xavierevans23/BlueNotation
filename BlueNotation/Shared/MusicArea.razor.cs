@@ -40,14 +40,14 @@ public partial class MusicArea : IDisposable
 
     public MusicArea()
     {
-        var startPreset = new NotesSessionPreset();
-
-        startPreset.ClefMode = ClefMode.Both;
-        startPreset.MaxNotes = 5;
-        startPreset.EndMode = EndMode.Infinite;
+        var startPreset = new KeysSessionPreset
+        {
+            ClefMode = ClefMode.Both,
+            EndMode = EndMode.Timer
+        };
 
         _preset = startPreset;
-        _session = new NotesSession(startPreset);
+        _session = new KeysSession(startPreset);
     }
 
     private async Task SetReady()
@@ -191,6 +191,13 @@ public partial class MusicArea : IDisposable
                 await SetReady();
                 return;
             case State.Playing:
+
+                if (_session.TotalNotesPlayed == 0)
+                {
+                    await SetReady();
+                    return;
+                }
+
                 await SetFinished();
                 return;
             case State.Paused:

@@ -7,7 +7,7 @@ public readonly record struct Note(Letter Letter, int Octave, Accidental Acciden
         return $"{Letter}{Octave} {Accidentals[Accidental]}";
     }
 
-    private static Dictionary<Accidental, string> Accidentals = new Dictionary<Accidental, string>
+    private readonly static Dictionary<Accidental, string> Accidentals = new()
     {
         { Accidental.Natural, ""},
         { Accidental.Sharp, "♯"},

@@ -8,7 +8,8 @@ public class NotesSession : ISession
     private readonly NotesSessionPreset _preset;
     private readonly Random _random = new();
 
-    private readonly Dictionary<int, StatisticsItemHistory> _noteStats = new();
+    private readonly Dictionary<int, StatisticsItemHistory> _trebleNoteStats = new();
+    private readonly Dictionary<int, StatisticsItemHistory> _bassNoteStats = new();
     private readonly Queue<int> _notes = new();
     private int _currentAttempts = 0;
 
@@ -119,17 +120,21 @@ public class NotesSession : ISession
 
         if (midi == _notes.Peek())
         {
+            
+
             TotalNotesPlayed++;
             TotalAttempts += _currentAttempts;
 
-            if (!_noteStats.ContainsKey(midi))
+            var noteStats = UseTrebleClef ? _trebleNoteStats : _bassNoteStats;
+
+            if (!noteStats.ContainsKey(midi))
             {
-                _noteStats[midi] = new();
+                noteStats[midi] = new();
             }
 
-            var old = _noteStats[midi];
+            var old = noteStats[midi];
 
-            _noteStats[midi] = new(old.Attempts + _currentAttempts, old.TimesPlayed + 1, old.Latency + latency);
+            noteStats[midi] = new(old.Attempts + _currentAttempts, old.TimesPlayed + 1, old.Latency + latency);
 
             if (_currentAttempts == 1)
             {
@@ -148,16 +153,28 @@ public class NotesSession : ISession
         statistics.TotalNotesPlayed += TotalNotesPlayed;
         statistics.TotalNotesAttempted += TotalAttempts;
 
-        foreach (var pair in _noteStats)
+        foreach (var pair in _trebleNoteStats)
         {
-            var note = statistics.GetNote(pair.Key);
+            var note = statistics.GetTrebleNote(pair.Key);
+
+            note.AddData(pair.Value);
+        }
+
+        foreach (var pair in _bassNoteStats)
+        {
+            var note = statistics.GetBassNote(pair.Key);
 
             note.AddData(pair.Value);
         }
     }
 
-    public IEnumerable<KeyValuePair<Note, StatisticsItemHistory>> GetNoteStatistics()
+    public IEnumerable<KeyValuePair<Note, StatisticsItemHistory>> GetTrebleNoteStatistics()
     {
-        return _noteStats.Select(kvp => new KeyValuePair<Note, StatisticsItemHistory>(NoteHelper.GetNote(kvp.Key, Key), kvp.Value));
+        return _trebleNoteStats.Select(kvp => new KeyValuePair<Note, StatisticsItemHistory>(NoteHelper.GetNote(kvp.Key, Key), kvp.Value));
+    }
+
+    public IEnumerable<KeyValuePair<Note, StatisticsItemHistory>> GetBassNoteStatistics()
+    {
+        return _bassNoteStats.Select(kvp => new KeyValuePair<Note, StatisticsItemHistory>(NoteHelper.GetNote(kvp.Key, Key), kvp.Value));
     }
 }

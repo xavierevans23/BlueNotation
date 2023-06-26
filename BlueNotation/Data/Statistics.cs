@@ -7,20 +7,28 @@ public class Statistics
     public int TotalNotesPlayed { get; set; } = 0;
     public int TotalNotesAttempted { get; set; } = 0;
     public DateTime TimeCreated { get; set; } = DateTime.Now;
-    public List<NoteStatisticsItem> Notes { get; set; } = new();
+    public List<NoteStatisticsItem> TrebleNotes { get; set; } = new();
+    public List<NoteStatisticsItem> BassNotes { get; set; } = new();
     public List<KeyStatisticsItem> Keys { get; set; } = new();
 
-    private readonly Dictionary<int, NoteStatisticsItem> _noteDictionary = new();
+    private readonly Dictionary<int, NoteStatisticsItem> _trebleNoteDictionary = new();
+    private readonly Dictionary<int, NoteStatisticsItem> _bassNoteDictionary = new();
     private readonly Dictionary<Key, KeyStatisticsItem> _keyDictionary = new();
 
     public void UnloadData()
     {
-        _noteDictionary.Clear();
+        _trebleNoteDictionary.Clear();
+        _bassNoteDictionary.Clear();
         _keyDictionary.Clear();
 
-        foreach (var item in Notes)
+        foreach (var item in TrebleNotes)
         {
-            _noteDictionary.Add(item.Midi, item);
+            _trebleNoteDictionary.Add(item.Midi, item);
+        }
+
+        foreach (var item in BassNotes)
+        {
+            _bassNoteDictionary.Add(item.Midi, item);
         }
 
         foreach (var item in Keys)
@@ -31,12 +39,18 @@ public class Statistics
 
     public void LoadData()
     {
-        Notes.Clear();
+        TrebleNotes.Clear();
+        BassNotes.Clear();
         Keys.Clear();
 
-        foreach (var note in _noteDictionary.Values)
+        foreach (var note in _trebleNoteDictionary.Values)
         {
-            Notes.Add(note);
+            TrebleNotes.Add(note);
+        }
+
+        foreach (var note in _bassNoteDictionary.Values)
+        {
+            BassNotes.Add(note);
         }
 
         foreach (var key in _keyDictionary.Values)
@@ -45,9 +59,14 @@ public class Statistics
         }
     }
 
-    public void AddNote(NoteStatisticsItem note)
+    public void AddTrebleNote(NoteStatisticsItem note)
     {
-        _noteDictionary[note.Midi] = note;
+        _trebleNoteDictionary[note.Midi] = note;
+    }
+
+    public void AddBassNote(NoteStatisticsItem note)
+    {
+        _bassNoteDictionary[note.Midi] = note;
     }
 
     public void AddKey(KeyStatisticsItem key)
@@ -55,14 +74,24 @@ public class Statistics
         _keyDictionary[key.Key] = key;
     }
 
-    public StatisticsItem GetNote(int midi)
+    public StatisticsItem GetTrebleNote(int midi)
     {
-        if (!_noteDictionary.ContainsKey(midi))
+        if (!_trebleNoteDictionary.ContainsKey(midi))
         {
-            _noteDictionary.Add(midi, new() { Midi = midi });
+            _trebleNoteDictionary.Add(midi, new() { Midi = midi });
         }
 
-        return _noteDictionary[midi];
+        return _trebleNoteDictionary[midi];
+    }
+
+    public StatisticsItem GetBassNote(int midi)
+    {
+        if (!_bassNoteDictionary.ContainsKey(midi))
+        {
+            _bassNoteDictionary.Add(midi, new() { Midi = midi });
+        }
+
+        return _bassNoteDictionary[midi];
     }
 
     public StatisticsItem GetKey(Key key)

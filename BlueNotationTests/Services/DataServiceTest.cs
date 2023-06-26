@@ -47,15 +47,15 @@ public class DataServiceTest
         Assert.Equal(6, stats.TotalNotesAttempted);
         Assert.Equal(4, stats.TotalNotesPlayed);
 
-        Assert.Equal(2, stats.GetNote(firstMidi).TotalAttempts);
-        Assert.Equal(2, stats.GetNote(firstMidi).TotalTimesPlayed);
-        Assert.Equal(150, stats.GetNote(firstMidi).TotalLatency);
+        Assert.Equal(2, stats.GetTrebleNote(firstMidi).TotalAttempts);
+        Assert.Equal(2, stats.GetTrebleNote(firstMidi).TotalTimesPlayed);
+        Assert.Equal(150, stats.GetTrebleNote(firstMidi).TotalLatency);
 
         firstMidi = firstMidi == 60 ? 62 : 60;
 
-        Assert.Equal(2, stats.GetNote(firstMidi).TotalAttempts);
-        Assert.Equal(1, stats.GetNote(firstMidi).TotalTimesPlayed);
-        Assert.Equal(200, stats.GetNote(firstMidi).TotalLatency);
+        Assert.Equal(2, stats.GetTrebleNote(firstMidi).TotalAttempts);
+        Assert.Equal(1, stats.GetTrebleNote(firstMidi).TotalTimesPlayed);
+        Assert.Equal(200, stats.GetTrebleNote(firstMidi).TotalLatency);
     }
 
     [Fact]

@@ -31,3 +31,7 @@
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 }
+
+.bigText {
+    font-size: 60px;
+}
