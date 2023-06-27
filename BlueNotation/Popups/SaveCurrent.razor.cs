@@ -28,8 +28,4 @@ public partial class SaveCurrent
 
         MudDialog?.Close(DialogResult.Ok(true));
     }
-
-    protected override void OnParametersSet()
-    {
-    }
 }

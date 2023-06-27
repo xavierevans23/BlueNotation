@@ -7,6 +7,9 @@
             <div class="pa-5" style="width: 300px;">
 
                 <MudTextField Required="true" @bind-Value="_name" Label="Name" />
+
+                <div style="height: 16px;"></div>
+
                 <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)">Save</MudButton>
             </div>
         </MudForm>
