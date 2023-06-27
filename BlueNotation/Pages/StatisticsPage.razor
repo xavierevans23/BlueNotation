@@ -1,0 +1,127 @@
+﻿@inject ConductorService ConductorService
+@inject DataService DataService
+
+@page "/stats"
+
+<div style="position: absolute; top: 16px; left: 16px">
+    <MudButton Href="/">Go back</MudButton>
+</div>
+
+<div style="height: 16px"></div>
+
+<div style="display:flex; flex-direction: column; align-items: center;">
+
+    <MudSimpleTable Elevation="10" Style="width: 300px" Hover="true">
+        <tbody>
+            <tr>
+                <th>Total notes played</th>
+                <td>@_totalNotesPlayed</td>
+            </tr>
+
+            <tr>
+                <th>Total notes correct</th>
+                <td>@_totalCorrect</td>
+            </tr>
+
+            <tr>
+                <th>All time accuracy</th>
+                <td>@(_allTimeAccuracy)%</td>
+            </tr>
+
+            <tr>
+                <th>Days since started</th>
+                <td>@_daysSinceCreated</td>
+            </tr>
+        </tbody>
+    </MudSimpleTable>
+
+    <div style="height: 16px"></div>
+
+    <div>
+        <MudButton Variant="Variant.Outlined" OnClick="() => UpdateData(-1)">All time</MudButton>
+        <MudButton Variant="Variant.Outlined" OnClick="() => UpdateData(5)">Last 5 sessions</MudButton>
+        <MudButton Variant="Variant.Outlined" OnClick=" ()=> UpdateData(1)">Last session</MudButton>
+    </div>
+
+    <div style="height: 16px"></div>
+
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; align-items: center;">
+        
+        <div>
+            <h1>Treble</h1>
+
+            <div style="height: 16px"></div>
+
+            <MudTable Elevation="10" Items="@_noteTrebleData" Hover="true" SortLabel="Sort By">
+                <HeaderContent>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>NoteHelper.GetMidi(x.Note))">Notes</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.TotalAttempts)">Attempts</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.TotalCorrect)">Correct</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.Accuracy)">Accuracy</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.AverageTime)">Time</MudTableSortLabel></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Notes">@context.Note.ToString()</MudTd>
+                    <MudTd DataLabel="Attempts">@context.TotalAttempts</MudTd>
+                    <MudTd DataLabel="Correct">@context.TotalCorrect</MudTd>
+                    <MudTd DataLabel="Accuracy">@context.Accuracy</MudTd>
+                    <MudTd DataLabel="Time">@context.AverageTime.ToString("0.00")</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </div>
+        
+        <div style="width: 16px"></div>
+
+        <div>
+            <h1>Bass</h1>
+
+            <div style="height: 16px"></div>
+
+            <div style="display: flex; flex-direction: row;">
+                <MudTable Elevation="10" Items="@_noteBassData" Hover="true" SortLabel="Sort By">
+                    <HeaderContent>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>NoteHelper.GetMidi(x.Note))">Notes</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.TotalAttempts)">Attempts</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.TotalCorrect)">Correct</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.Accuracy)">Accuracy</MudTableSortLabel></MudTh>
+                        <MudTh><MudTableSortLabel SortBy="new Func<TableNoteData, object>(x=>x.AverageTime)">Time</MudTableSortLabel></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Notes">@context.Note.ToString()</MudTd>
+                        <MudTd DataLabel="Attempts">@context.TotalAttempts</MudTd>
+                        <MudTd DataLabel="Correct">@context.TotalCorrect</MudTd>
+                        <MudTd DataLabel="Accuracy">@context.Accuracy</MudTd>
+                        <MudTd DataLabel="Time">@context.AverageTime.ToString("0.00")</MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 16px"></div>
+
+    <div>
+        <h1>Key</h1>
+
+        <div style="height: 16px"></div>
+
+        <div style="display: flex; flex-direction: row;">
+            <MudTable Elevation="10" Items="@_keyData" Hover="true" SortLabel="Sort By">
+                <HeaderContent>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableKeyData, object>(x=>x.Key)">Keys</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableKeyData, object>(x=>x.TotalAttempts)">Attempts</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableKeyData, object>(x=>x.TotalCorrect)">Correct</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableKeyData, object>(x=>x.Accuracy)">Accuracy</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<TableKeyData, object>(x=>x.AverageTime)">Time</MudTableSortLabel></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Keys">@context.Key</MudTd>
+                    <MudTd DataLabel="Attempts">@context.TotalAttempts</MudTd>
+                    <MudTd DataLabel="Correct">@context.TotalCorrect</MudTd>
+                    <MudTd DataLabel="Accuracy">@context.Accuracy</MudTd>
+                    <MudTd DataLabel="Time">@context.AverageTime.ToString("0.00")</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </div>
+    </div>
+</div>

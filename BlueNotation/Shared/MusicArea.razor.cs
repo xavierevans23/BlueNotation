@@ -9,7 +9,7 @@ namespace BlueNotation.Shared;
 
 public partial class MusicArea : IDisposable
 {
-    private readonly static DialogOptions DialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, CloseButton = true, DisableBackdropClick = true };
+    private readonly static DialogOptions DialogOptions = new() { MaxWidth = MaxWidth.Medium, CloseButton = true, DisableBackdropClick = true };
 
     private const string FlashCssA = "flashA";
     private const string FlashCssB = "flashB";
@@ -222,10 +222,6 @@ public partial class MusicArea : IDisposable
     private void PresetsPressed()
     {
         DialogService.Show<SelectPreset>("Select preset", DialogOptions);
-    }
-
-    private void StatisticsPressed()
-    {
     }
 
     private void OptionsPressed()

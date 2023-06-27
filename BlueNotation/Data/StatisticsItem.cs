@@ -61,9 +61,9 @@ public abstract class StatisticsItem
 
             count--;
         }
-        while (count > 0);
+        while (count >= 0);
 
-        return new StatisticsItemHistory(totalAttempts, totalTimesPlayed, totalLatency);
+        return new  (totalAttempts, totalTimesPlayed, totalLatency);
     }
 }
 
