@@ -13,6 +13,7 @@ public class DataServiceTest
         var preset = new NotesSessionPreset
         {
             TrebleNoteRange = new() { 60, 62 },
+            BassNoteRange = new() { 60, 62 },
             ClefMode = ClefMode.Treble,
             AllowRepeats = false,
             MaxNotes = 1,

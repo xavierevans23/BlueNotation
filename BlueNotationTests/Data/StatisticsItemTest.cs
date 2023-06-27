@@ -33,7 +33,7 @@ public class StatisticsItemTest
         noteItem.AddData(new(10, 7, 700));
         noteItem.AddData(new(15, 2, 350));
 
-        var history = noteItem.GetHistory(1);
+        var history = noteItem.GetHistory(0);
         Assert.Equal(15, history.Attempts);
         Assert.Equal(2, history.TimesPlayed);
         Assert.Equal(350, history.Latency);
