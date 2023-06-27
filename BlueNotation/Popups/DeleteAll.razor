@@ -1,0 +1,23 @@
+﻿@inject DataService DataService
+
+<MudDialog>
+    <DialogContent>
+        <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">Are you sure you want to reset all saved data?</MudAlert>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private async Task Submit()
+    {
+        DataService.Statistics = new();
+        DataService.PresetsData = new();
+        await DataService.SaveData();
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    void Cancel() => MudDialog.Cancel();
+}

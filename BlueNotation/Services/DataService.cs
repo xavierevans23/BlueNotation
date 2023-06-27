@@ -8,8 +8,8 @@ public class DataService
 {
     private readonly LocalStorageService _storageService;
 
-    public Statistics Statistics { get; private set; } = new();
-    public PresetsData PresetsData { get; private set; } = new();
+    public Statistics Statistics { get; set; } = new();
+    public PresetsData PresetsData { get; set; } = new();
 
     public DataService(LocalStorageService localStorageService)
     {

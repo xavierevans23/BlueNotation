@@ -1,6 +1,8 @@
 ﻿using BlueNotation.Data;
 using BlueNotation.Music;
+using BlueNotation.Popups;
 using BlueNotation.Services;
+using MudBlazor;
 
 namespace BlueNotation.Pages;
 
@@ -157,6 +159,14 @@ public partial class StatisticsPage
 
     protected override async Task OnParametersSetAsync()
     {
+        await UpdateData(-1);
+    }
+
+    private async Task ResetData()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var dialog  = await DialogService.ShowAsync<DeleteAll>("Reset data", options);
+        await dialog.Result;
         await UpdateData(-1);
     }
 }

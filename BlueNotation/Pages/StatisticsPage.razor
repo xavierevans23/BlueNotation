@@ -1,10 +1,15 @@
 ﻿@inject ConductorService ConductorService
 @inject DataService DataService
+@inject IDialogService DialogService
 
 @page "/stats"
 
 <div style="position: absolute; top: 16px; left: 16px">
     <MudButton Href="/">Go back</MudButton>
+</div>
+
+<div style="position: absolute; top: 16px; right: 16px">
+    <MudButton OnClick="ResetData">Reset data</MudButton>
 </div>
 
 <div style="height: 16px"></div>
@@ -125,5 +130,5 @@
         </div>
     </div>
 
-       <div style="height: 16px"></div>
+    <div style="height: 16px"></div>
 </div>
