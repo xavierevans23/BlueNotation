@@ -1,0 +1,44 @@
+﻿@inject ConductorService ConductorService
+
+<MudDialog>
+    <DialogContent>
+
+        <MudForm @bind-IsValid="@_success">
+            <MudSelect Required="true" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" MultiSelection="true" @bind-Value="value" @bind-SelectedValues="_chosenKeys" T="string" Label="Keys">
+                @foreach (var key in _allKeyNames)
+                {
+                    <MudSelectItem T="string" Value="@key">@key</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect Required="true" @bind-Value="_direction" Label="Select direction">
+                <MudSelectItem Value="@("Up")">Up</MudSelectItem>
+                <MudSelectItem Value="@("Down")">Down</MudSelectItem>
+                <MudSelectItem Value="@("Both")">Both</MudSelectItem>
+                <MudSelectItem Value="@("Shuffle")">Shuffle</MudSelectItem>
+            </MudSelect>
+
+            <MudCheckBox @bind-Checked="@_retry" Label="Force retry on mistake"></MudCheckBox>
+            <MudCheckBox @bind-Checked="@_allowConsecutive" Label="Allow consecutive keys"></MudCheckBox>
+
+            <MudSelect Required="true" @bind-Value="_endMode" Label="Select how session ends">
+                <MudSelectItem Value="@("Timer")">An amount of time</MudSelectItem>
+                <MudSelectItem Value="@("Questions")">An amount of questions</MudSelectItem>
+                <MudSelectItem Value="@("Infinite")">Infinite</MudSelectItem>
+            </MudSelect>
+
+            <MudTextField @bind-Value="_endValue" Disabled="@(_endMode == "Infinite")" Label="@(_endMode == "Timer" ? "Enter number of seconds" : "Enter number of questions")" />
+
+            <MudSelect Required="true" @bind-Value="_clefs" Label="Select which clefs">
+                <MudSelectItem Value="@("Treble")">Treble</MudSelectItem>
+                <MudSelectItem Value="@("Bass")">Bass</MudSelectItem>
+                <MudSelectItem Value="@("Both")">Both</MudSelectItem>
+            </MudSelect>
+
+            <div style="height: 16px"></div>
+
+            <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)">Done</MudButton>
+        </MudForm>
+
+    </DialogContent>
+</MudDialog>

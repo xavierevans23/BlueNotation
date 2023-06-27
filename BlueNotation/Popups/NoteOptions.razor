@@ -1,0 +1,62 @@
+﻿@inject ConductorService ConductorService
+@inject MidiService MidiService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm @bind-IsValid="@_success">
+            
+            <MudTextField Required="true" @bind-Value="_trebleNotes" Label="Treble notes" />
+            <MudTextField Required="true" @bind-Value="_bassNotes" Label="Bass notes" />
+            
+            <div style="height: 8px"></div>
+
+            @if (_lastPlayed != "")
+            {
+                <p>Last notes played @(
+                _lastPlayed
+                )</p>
+            }
+
+            <MudSelect Required="true" @bind-Value="_minNotes" Label="MinimumNotes">
+                <MudSelectItem Value="@("1")">1</MudSelectItem>
+                <MudSelectItem Value="@("2")">2</MudSelectItem>
+                <MudSelectItem Value="@("3")">3</MudSelectItem>
+                <MudSelectItem Value="@("4")">4</MudSelectItem>
+                <MudSelectItem Value="@("5")">5</MudSelectItem>                
+            </MudSelect>
+
+            <MudSelect Required="true" @bind-Value="_maxNotes" Label="Max">
+                <MudSelectItem Value="@("1")">1</MudSelectItem>
+                <MudSelectItem Value="@("2")">2</MudSelectItem>
+                <MudSelectItem Value="@("3")">3</MudSelectItem>
+                <MudSelectItem Value="@("4")">4</MudSelectItem>
+                <MudSelectItem Value="@("5")">5</MudSelectItem>
+            </MudSelect>
+            
+            <MudCheckBox @bind-Checked="@_allowConsecutive" Label="Allow consecutive keys"></MudCheckBox>
+
+            <MudSelect Required="true" @bind-Value="_endMode" Label="Select how session ends">
+                <MudSelectItem Value="@("Timer")">An amount of time</MudSelectItem>
+                <MudSelectItem Value="@("Questions")">An amount of questions</MudSelectItem>
+                <MudSelectItem Value="@("Infinite")">Infinite</MudSelectItem>
+            </MudSelect>
+
+            <MudTextField @bind-Value="_endValue" Disabled="@(_endMode == "Infinite")" Label="@(_endMode == "Timer" ? "Enter number of seconds" : "Enter number of questions")" />
+
+            <MudSelect Required="true" @bind-Value="_clefs" Label="Select which clefs">
+                <MudSelectItem Value="@("Treble")">Treble</MudSelectItem>
+                <MudSelectItem Value="@("Bass")">Bass</MudSelectItem>
+                <MudSelectItem Value="@("Both")">Both</MudSelectItem>
+            </MudSelect>
+
+            <div style="height: 16px"></div>
+
+            @if (_error is not null)
+            {
+                <p>@_error</p>
+            }
+            <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)">Done</MudButton>
+        </MudForm>
+    </DialogContent>
+</MudDialog>
+

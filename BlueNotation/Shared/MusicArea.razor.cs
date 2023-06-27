@@ -24,8 +24,9 @@ public partial class MusicArea : IDisposable
     private readonly Stopwatch _timer = new();
     private readonly Stopwatch _latencyTimer = new();
     private State _state = State.Ready;
-    private SessionPreset _preset;
+#pragma warning disable CS8618 // Value assigned in OnParameterSets();
     private ISession _session;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     private bool _showStats = false;
 
@@ -41,39 +42,36 @@ public partial class MusicArea : IDisposable
 
     private bool _disposed = false;
 
-    public MusicArea()
+    private SessionPreset Preset
     {
-        var startPreset = new NotesSessionPreset
+        get
         {
-            ClefMode = ClefMode.Both,
-            EndMode = EndMode.Infinite,
-            AllowRepeats = false,
-            BassNoteRange = new() { 48, 50, 52, 53, 55, 57, 59, 60 },
-            TrebleNoteRange = new() { 60, 62, 64, 65, 67, 69, 71, 72},
-            MaxNotes = 1,
-            MinNotes = 1,
-            Name = "Default",
-            QuestionCount = 10,
-            TimerSeconds = 30,
-        };
+            return ConductorService.Preset;
+        }
+        set
+        {
+            ConductorService.Preset = value;
+        }
+    }
 
-        _preset = startPreset;
-        _session = new NotesSession(startPreset);
+    private void LoadPreset()
+    {
+        if (Preset is NotesSessionPreset notePreset)
+        {
+            _session = new NotesSession(notePreset);
+        }
+
+        if (Preset is KeysSessionPreset keysPreset)
+        {
+            _session = new KeysSession(keysPreset);
+        }
     }
 
     private async Task SetReady()
     {
         _state = State.Ready;
 
-        if (_preset is NotesSessionPreset notePreset)
-        {
-            _session = new NotesSession(notePreset);
-        }
-
-        if (_preset is KeysSessionPreset keysPreset)
-        {
-            _session = new KeysSession(keysPreset);
-        }
+        LoadPreset();
 
         _timer.Reset();
         _latencyTimer.Restart();
@@ -156,6 +154,29 @@ public partial class MusicArea : IDisposable
         await InvokeAsync(StateHasChanged);
     }
 
+    private async Task SetWaiting()
+    {
+        _state = State.Waiting;
+
+        _timer.Stop();
+        _clock?.Dispose();
+
+        await ShowOverlayText("", "");
+        if (_stave is not null)
+        {
+            await _stave.SetDisplay();
+            await _stave.FadeOut();
+        }
+
+        _leftText = null;
+        _rightText = null;
+        _showPlayButton = true;
+        _disableFinishButton = true;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+
     private async Task PlayPausePressed()
     {
         switch (_state)
@@ -172,6 +193,10 @@ public partial class MusicArea : IDisposable
             case State.Finished:
                 await SetReady();
                 return;
+            case State.Waiting:
+                await SetReady();
+                return;
+
         }
     }
 
@@ -189,6 +214,9 @@ public partial class MusicArea : IDisposable
                 await SetReady();
                 return;
             case State.Finished:
+                await SetReady();
+                return;
+            case State.Waiting:
                 await SetReady();
                 return;
         }
@@ -219,18 +247,32 @@ public partial class MusicArea : IDisposable
         }
     }
 
-    private void PresetsPressed()
+    private async Task  PresetsPressed()
     {
         DialogService.Show<SelectPreset>("Select preset", DialogOptions);
+        await SetWaiting();
     }
 
-    private void OptionsPressed()
+    private async Task KeyPresetPressed()
     {
+        DialogService.Show<KeyOptions>("New key preset", DialogOptions);
+        await SetWaiting();
     }
 
-    public async Task NewPreset(SessionPreset preset)
+    private async Task NotePresetPressed()
     {
-        _preset = preset;
+        DialogService.Show<NoteOptions>("New note preset", DialogOptions);
+        await SetWaiting();
+    }
+
+    private async Task SavePresetPressed()
+    {
+        DialogService.Show<SaveCurrent>("Save preset", DialogOptions);
+        await SetWaiting();
+    }
+
+    public async Task NewPreset()
+    {
         await SetReady();
     }
 
@@ -276,6 +318,7 @@ public partial class MusicArea : IDisposable
 
     protected async override Task OnInitializedAsync()
     {
+        LoadPreset();
         await ChangeNoteText();
         MidiService.StatusChanged += MidiStatusChanged;
         MidiService.NoteDown += MidiNotePlayed;
@@ -372,18 +415,18 @@ public partial class MusicArea : IDisposable
     {
         if (_state == State.Playing)
         {
-            if (_preset.EndMode == EndMode.Timer)
+            if (Preset.EndMode == EndMode.Timer)
             {
-                if (_timer.Elapsed.TotalSeconds > _preset.TimerSeconds)
+                if (_timer.Elapsed.TotalSeconds > Preset.TimerSeconds)
                 {
                     await SetFinished();
                     return;
                 }
             }
-            if (_preset.EndMode == EndMode.QuestionCount)
+            if (Preset.EndMode == EndMode.QuestionCount)
             {
-                if ((_session is NotesSession notes && notes.TotalNotesPlayed >= _preset.QuestionCount) || (
-                    _session is KeysSession keys && keys.TotalScalesPlayed >= _preset.QuestionCount))
+                if ((_session is NotesSession notes && notes.TotalNotesPlayed >= Preset.QuestionCount) || (
+                    _session is KeysSession keys && keys.TotalScalesPlayed >= Preset.QuestionCount))
                 {
                     await SetFinished();
                     return;
@@ -391,9 +434,9 @@ public partial class MusicArea : IDisposable
             }
         }
 
-        if (_preset.EndMode == EndMode.Timer)
+        if (Preset.EndMode == EndMode.Timer)
         {
-            _leftText = (TimeSpan.FromSeconds(_preset.TimerSeconds) - _timer.Elapsed).ToString(@"mm\:ss");
+            _leftText = (TimeSpan.FromSeconds(Preset.TimerSeconds) - _timer.Elapsed).ToString(@"mm\:ss");
 
             if (_session is NotesSession notes)
             {
@@ -405,22 +448,22 @@ public partial class MusicArea : IDisposable
                 _rightText = $"#{keys.TotalScalesPlayed + 1}";
             }
         }
-        if (_preset.EndMode == EndMode.QuestionCount)
+        if (Preset.EndMode == EndMode.QuestionCount)
         {
             _leftText = _timer.Elapsed.ToString(@"mm\:ss");
             _rightText = _session.TotalAttempts.ToString();
 
             if (_session is NotesSession notes)
             {
-                _rightText = $"{notes.TotalNotesPlayed}/{_preset.QuestionCount}";
+                _rightText = $"{notes.TotalNotesPlayed}/{Preset.QuestionCount}";
             }
 
             if (_session is KeysSession keys)
             {
-                _rightText = $"{keys.TotalScalesPlayed}/{_preset.QuestionCount}";
+                _rightText = $"{keys.TotalScalesPlayed}/{Preset.QuestionCount}";
             }
         }
-        if (_preset.EndMode == EndMode.Infinite)
+        if (Preset.EndMode == EndMode.Infinite)
         {
             _leftText = null;
 
@@ -434,8 +477,6 @@ public partial class MusicArea : IDisposable
                 _rightText = $"#{keys.TotalScalesPlayed + 1}";
             }
         }
-
-
 
         if (_stave is not null)
         {
@@ -504,5 +545,6 @@ public enum State
     Ready,
     Playing,
     Paused,
-    Finished
+    Finished,
+    Waiting
 }

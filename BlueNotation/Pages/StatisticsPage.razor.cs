@@ -10,7 +10,6 @@ public partial class StatisticsPage
     private int _totalCorrect = 0;
     private int _daysSinceCreated = 0;
     private int _allTimeAccuracy = 0;
-    private string _clefSelection = "Treble";
 
     private readonly List<TableNoteData> _noteTrebleData = new();
     private readonly List<TableNoteData> _noteBassData = new();

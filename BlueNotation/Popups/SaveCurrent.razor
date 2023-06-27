@@ -1,0 +1,14 @@
+﻿@inject DataService DataService
+@inject ConductorService ConductorService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm @bind-IsValid="@_success">
+            <div class="pa-5" style="width: 300px;">
+
+                <MudTextField Required="true" @bind-Value="_name" Label="Name" />
+                <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)">Save</MudButton>
+            </div>
+        </MudForm>
+    </DialogContent>
+</MudDialog>
