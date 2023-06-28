@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @inject ConductorService ConductorService
 
-<MudThemeProvider />
+<MudThemeProvider Theme="_theme"/>
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -10,4 +10,14 @@
     <main>
         @Body
     </main>
+}
+
+@code
+{
+    private MudTheme _theme = new();
+
+    public MainLayout()
+    {
+        _theme.Palette.Primary = new MudBlazor.Utilities.MudColor(42, 81, 173, (int)byte.MaxValue);
+    }
 }
